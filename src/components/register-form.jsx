@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import Button from "./ui/Button"
 import { Input } from "./ui/Input"
 import { Label } from "./ui/label"
@@ -156,12 +157,12 @@ export function RegisterForm() {
             <div className="text-center">
                 <p className="text-gray-700">
                     Have an account?{" "}
-                    <button
-                        onClick={() => window.dispatchEvent(new CustomEvent('navigateToLogin'))}
+                    <Link
+                        to="/login"
                         className="font-medium text-gray-900 hover:text-orange-600 transition-colors"
                     >
                         Login
-                    </button>
+                    </Link>
                 </p>
             </div>
 

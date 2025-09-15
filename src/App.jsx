@@ -1,5 +1,6 @@
 // src/App.jsx
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import HeroSection from './components/sections/HeroSection';
@@ -13,62 +14,11 @@ import CTASection from './components/sections/CTASection';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
-function App() {
-  const [currentPage, setCurrentPage] = useState('login'); // 'landing', 'login', 'register'
-
-  useEffect(() => {
-    const handleNavigateToLogin = () => {
-      console.log('Navigating to login');
-      setCurrentPage('login');
-    };
-    const handleNavigateToRegister = () => {
-      console.log('Navigating to register');
-      setCurrentPage('register');
-    };
-    const handleNavigateToLanding = () => {
-      console.log('Navigating to landing');
-      setCurrentPage('landing');
-    };
-
-    window.addEventListener('navigateToLogin', handleNavigateToLogin);
-    window.addEventListener('navigateToRegister', handleNavigateToRegister);
-    window.addEventListener('navigateToLanding', handleNavigateToLanding);
-
-    return () => {
-      window.removeEventListener('navigateToLogin', handleNavigateToLogin);
-      window.removeEventListener('navigateToRegister', handleNavigateToRegister);
-      window.removeEventListener('navigateToLanding', handleNavigateToLanding);
-    };
-  }, []);
-
-  if (currentPage === 'login') {
-    return <Login />;
-  }
-
-  if (currentPage === 'register') {
-    return <Register />;
-  }
-
+// Landing Page Component
+const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-
-      {/* Test Navigation Buttons */}
-      <div className="fixed top-4 right-4 z-50 space-x-2">
-        <button
-          onClick={() => window.dispatchEvent(new CustomEvent('navigateToLogin'))}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Go to Login
-        </button>
-        <button
-          onClick={() => window.dispatchEvent(new CustomEvent('navigateToRegister'))}
-          className="bg-green-500 text-white px-4 py-2 rounded"
-        >
-          Go to Register
-        </button>
-      </div>
-
       <main>
         <HeroSection />
         <TutorsSection />
@@ -79,9 +29,29 @@ function App() {
         <TestimonialsSection />
         <CTASection />
       </main>
-
       <Footer />
     </div>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* Redirect root to login */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+
+        {/* Authentication Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Landing Page Route */}
+        <Route path="/landing" element={<LandingPage />} />
+
+        {/* Catch all route - redirect to login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
