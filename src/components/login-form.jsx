@@ -1,6 +1,6 @@
 
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Button from "./ui/Button"
 import { Input } from "./ui/Input"
 import { Label } from "./ui/label"
@@ -11,10 +11,17 @@ export function LoginForm() {
     const [showPassword, setShowPassword] = useState(false)
     const [email, setEmail] = useState("robert.langster@gmail.com")
     const [password, setPassword] = useState("password123")
+    const navigate = useNavigate()
 
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log("Login attempt:", { email, password })
+
+        // Simulate successful login and redirect to dashboard
+        // In a real app, you would validate credentials here
+        if (email && password) {
+            navigate('/dashboard')
+        }
     }
 
     return (

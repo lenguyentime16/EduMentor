@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Button from "./ui/Button"
 import { Input } from "./ui/Input"
 import { Label } from "./ui/label"
@@ -9,6 +9,7 @@ import { SocialLoginButtons } from "./social-login-button"
 export function RegisterForm() {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
         firstName: "Alex",
         lastName: "Ferguson",
@@ -28,6 +29,12 @@ export function RegisterForm() {
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log("Register attempt:", formData)
+
+        // Simulate successful registration and redirect to dashboard
+        // In a real app, you would create the account here
+        if (formData.email && formData.password && formData.password === formData.confirmPassword) {
+            navigate('/dashboard')
+        }
     }
 
     return (

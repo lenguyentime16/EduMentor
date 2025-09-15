@@ -13,6 +13,7 @@ import TestimonialsSection from './components/sections/TestimonialsSection';
 import CTASection from './components/sections/CTASection';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 
 // Landing Page Component
 const LandingPage = () => {
@@ -45,10 +46,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Landing Page Route */}
-        <Route path="/landing" element={<LandingPage />} />
+        {/* Dashboard Route */}
+        <Route path="/dashboard" element={<Dashboard />} />
 
-        {/* Catch all route - redirect to login */}
+        {/* Landing Page Route */}
+        <Route path="/landing" element={<LandingPage />} />        {/* Catch all route - redirect to login */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
