@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { Bell, ChevronLeft, ChevronRight, Calendar, Clock } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Bell, ChevronLeft, ChevronRight, Calendar, Clock, User, Settings, HelpCircle, LogOut, ChevronDown } from 'lucide-react';
 import Button from '../components/ui/Button';
 
 const Dashboard = () => {
     const [currentDate, setCurrentDate] = useState(new Date(2025, 6, 24)); // July 24, 2025
     const [selectedDate, setSelectedDate] = useState(24);
     const [isTransitioning, setIsTransitioning] = useState(false);
+    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
 
     // Calendar helper functions
     const getDaysInMonth = (date) => {
@@ -56,10 +58,10 @@ const Dashboard = () => {
                     key={day}
                     onClick={() => setSelectedDate(day)}
                     className={`h-16 flex items-center justify-center cursor-pointer text-sm font-medium transition-all duration-200 border-r border-b border-gray-200 last:border-r-0 relative ${isSelected
-                            ? 'bg-blue-50 text-blue-600'
-                            : isToday
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700 hover:bg-gray-50'
+                        ? 'bg-blue-50 text-blue-600'
+                        : isToday
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'text-gray-700 hover:bg-gray-50'
                         }`}
                 >
                     <span className={`${isSelected ? 'bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-semibold' : ''}`}>
@@ -104,6 +106,103 @@ const Dashboard = () => {
         setSelectedDate(24);
     };
 
+    // Handle click outside dropdown
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsUserDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    // UserDropdown Component
+    const UserDropdown = () => (
+        <div
+            ref={dropdownRef}
+            className="relative"
+        >
+            <button
+                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                className="flex items-center space-x-2 hover:bg-gray-50 rounded-lg p-2 transition-all duration-200"
+            >
+                <div className="w-10 h-10 bg-[#FDCB6E] rounded-full flex items-center justify-center text-white font-semibold">
+                    N
+                </div>
+                <div className="text-left">
+                    <p className="text-sm font-medium text-gray-900">Welcome, Nguyên</p>
+                    <p className="text-xs text-gray-500">lenguyentime16@gmail.com</p>
+                </div>
+                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {/* Dropdown Menu */}
+            {isUserDropdownOpen && (
+                <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 animate-in slide-in-from-top-2 duration-200">
+                    {/* User Info Header */}
+                    <div className="px-4 py-3 border-b border-gray-100">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-12 h-12 bg-[#FDCB6E] rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                                N
+                            </div>
+                            <div>
+                                <p className="font-medium text-gray-900">Welcome, Nguyên</p>
+                                <p className="text-sm text-gray-500">lenguyentime16@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Menu Items */}
+                    <div className="py-2">
+                        <button className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
+                            <User className="w-5 h-5 text-gray-500" />
+                            <span className="text-gray-700 font-medium">Personal Info</span>
+                        </button>
+                        <button className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
+                            <Settings className="w-5 h-5 text-gray-500" />
+                            <span className="text-gray-700 font-medium">Account settings</span>
+                        </button>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="border-t border-gray-100 my-2"></div>
+
+                    {/* Help & Support */}
+                    <div className="py-2">
+                        <button className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150">
+                            <span className="text-gray-700 font-medium">FAQs</span>
+                        </button>
+                        <button className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150">
+                            <span className="text-gray-700 font-medium">Terms and Conditions</span>
+                        </button>
+                        <button className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150">
+                            <span className="text-gray-700 font-medium">Privacy Policy</span>
+                        </button>
+                        <button className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
+                            <HelpCircle className="w-5 h-5 text-gray-500" />
+                            <span className="text-gray-700 font-medium">Need help?</span>
+                        </button>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="border-t border-gray-100 my-2"></div>
+
+                    {/* Logout */}
+                    <div className="px-4 py-2">
+                        <button className="w-full bg-[#FDCB6E] text-white rounded-lg py-3 px-4 font-medium hover:bg-[#E6B15C] transition-all duration-200 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md">
+                            <LogOut className="w-4 h-4" />
+                            <span>Log Out</span>
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
@@ -119,16 +218,8 @@ const Dashboard = () => {
                         </nav>
                     </div>
                     <div className="flex items-center space-x-4">
-                        <Bell className="w-6 h-6 text-gray-600 cursor-pointer hover:text-[#FDCB6E]" />
-                        <div className="flex items-center space-x-2">
-                            <div className="w-10 h-10 bg-[#FDCB6E] rounded-full flex items-center justify-center text-white font-semibold">
-                                N
-                            </div>
-                            <div>
-                                <p className="text-sm font-medium text-gray-900">Welcome, Nguyên</p>
-                                <p className="text-xs text-gray-500">nguyentime168@gmail.com</p>
-                            </div>
-                        </div>
+                        <Bell className="w-6 h-6 text-gray-600 cursor-pointer hover:text-[#FDCB6E] transition-colors duration-200" />
+                        <UserDropdown />
                     </div>
                 </div>
             </header>
