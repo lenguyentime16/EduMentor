@@ -13,13 +13,31 @@ const FindTutor = () => {
         price: '',
         rating: ''
     });
+    const [dropdownStates, setDropdownStates] = useState({
+        subject: false,
+        level: false,
+        price: false,
+        rating: false
+    });
     const dropdownRef = useRef(null);
+    const filterDropdownRef = useRef(null);
 
     // Handle click outside dropdown
     useEffect(() => {
         const handleClickOutside = (event) => {
+            // Handle user dropdown
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setIsUserDropdownOpen(false);
+            }
+
+            // Handle filter dropdowns - only close if click is outside all filter elements
+            if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target)) {
+                setDropdownStates({
+                    subject: false,
+                    level: false,
+                    price: false,
+                    rating: false
+                });
             }
         };
 
@@ -106,6 +124,7 @@ const FindTutor = () => {
             id: 1,
             name: 'Nguyễn Thị Hương',
             subject: 'Toán nâng cao lớp 12',
+            subjectCategory: 'Toán',
             rating: 4.9,
             reviews: 19,
             price: '380,000',
@@ -119,6 +138,7 @@ const FindTutor = () => {
             id: 2,
             name: 'Trần Văn Minh',
             subject: 'Lập trình Python cơ bản',
+            subjectCategory: 'Tin học - Lập trình',
             rating: 4.8,
             reviews: 24,
             price: '250,000',
@@ -132,6 +152,7 @@ const FindTutor = () => {
             id: 3,
             name: 'Lê Thị Mai',
             subject: 'IELTS Speaking Band 7+',
+            subjectCategory: 'Tiếng Anh',
             rating: 4.7,
             reviews: 31,
             price: '180,000',
@@ -144,6 +165,74 @@ const FindTutor = () => {
     ];
 
     const subjects = ['Tất cả', 'Lớp học', 'Bài viết', 'Gia sư'];
+
+    // Subject options for dropdown
+    const subjectOptions = [
+        'Toán',
+        'Ngữ Văn',
+        'Vật Lý',
+        'Hoá học',
+        'Sinh học',
+        'Tiếng Anh',
+        'Tin học - Lập trình'
+    ];
+
+    // Function to check if a section should be shown based on active tab
+    const shouldShowSection = (sectionType) => {
+        if (activeTab === 'Tất cả') return true;
+        return activeTab === sectionType;
+    };
+
+    // Function to filter tutors based on selected subject
+    const getFilteredTutors = () => {
+        console.log('Current filter subject:', filters.subject); // Debug log
+        console.log('All tutors:', tutors); // Debug log
+        if (!filters.subject) return tutors;
+        const filtered = tutors.filter(tutor => {
+            console.log(`Comparing: ${tutor.subjectCategory} === ${filters.subject}`); // Debug log
+            return tutor.subjectCategory === filters.subject;
+        });
+        console.log('Filtered tutors:', filtered); // Debug log
+        return filtered;
+    };
+
+    // Component for empty state
+    const EmptyState = ({ message }) => (
+        <div className="lg:col-span-2 xl:col-span-3">
+            <div className="text-center py-12">
+                <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Search className="w-8 h-8 text-gray-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Chưa có lớp cho môn học này</h3>
+                <p className="text-gray-600">{message}</p>
+            </div>
+        </div>
+    );
+
+    // Toggle dropdown function
+    const toggleDropdown = (dropdownType) => {
+        setDropdownStates(prev => ({
+            ...prev,
+            [dropdownType]: !prev[dropdownType]
+        }));
+    };
+
+    // Handle subject selection
+    const handleSubjectSelect = (subject) => {
+        console.log('Selected subject:', subject); // Debug log
+        setFilters(prev => {
+            const newFilters = {
+                ...prev,
+                subject: subject
+            };
+            console.log('New filters:', newFilters); // Debug log
+            return newFilters;
+        });
+        setDropdownStates(prev => ({
+            ...prev,
+            subject: false
+        }));
+    };
 
     const TutorCard = ({ tutor }) => (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300 hover:scale-[1.02]">
@@ -274,19 +363,54 @@ const FindTutor = () => {
                     </div>
 
                     {/* Filters */}
-                    <div className="flex justify-center space-x-4 mb-8">
+                    <div ref={filterDropdownRef} className="flex justify-center space-x-4 mb-8">
+                        {/* Subject Dropdown */}
+                        <div className="relative">
+                            <button
+                                onClick={() => toggleDropdown('subject')}
+                                className={`flex items-center space-x-2 px-4 py-3 rounded-lg border transition-all duration-200 ${filters.subject
+                                    ? 'bg-[#FFF3E0] border-[#FDCB6E] text-[#FDCB6E]'
+                                    : 'bg-white border-gray-300 text-gray-600 hover:border-[#FDCB6E] hover:text-[#FDCB6E]'
+                                    }`}
+                            >
+                                <Filter className="w-4 h-4" />
+                                <span className="font-medium">
+                                    {filters.subject || 'Môn học'}
+                                </span>
+                                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${dropdownStates.subject ? 'rotate-180' : ''
+                                    }`} />
+                            </button>
+
+                            {dropdownStates.subject && (
+                                <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 animate-in slide-in-from-top-2 duration-200">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleSubjectSelect('');
+                                        }}
+                                        className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150"
+                                    >
+                                        <span className="text-gray-700 font-medium">Tất cả môn học</span>
+                                    </button>
+                                    {subjectOptions.map((subject) => (
+                                        <button
+                                            key={subject}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleSubjectSelect(subject);
+                                            }}
+                                            className={`w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150 ${filters.subject === subject ? 'bg-[#FFF3E0] text-[#FDCB6E]' : ''
+                                                }`}
+                                        >
+                                            <span className="text-gray-700 font-medium">{subject}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
                         <button
-                            onClick={() => setFilters({ ...filters, subject: filters.subject ? '' : 'active' })}
-                            className={`flex items-center space-x-2 px-4 py-3 rounded-lg border transition-all duration-200 ${filters.subject
-                                ? 'bg-[#FFF3E0] border-[#FDCB6E] text-[#FDCB6E]'
-                                : 'bg-white border-gray-300 text-gray-600 hover:border-[#FDCB6E] hover:text-[#FDCB6E]'
-                                }`}
-                        >
-                            <Filter className="w-4 h-4" />
-                            <span className="font-medium">Môn học</span>
-                        </button>
-                        <button
-                            onClick={() => setFilters({ ...filters, level: filters.level ? '' : 'active' })}
+                            onClick={() => toggleDropdown('level')}
                             className={`flex items-center space-x-2 px-4 py-3 rounded-lg border transition-all duration-200 ${filters.level
                                 ? 'bg-[#FFF3E0] border-[#FDCB6E] text-[#FDCB6E]'
                                 : 'bg-white border-gray-300 text-gray-600 hover:border-[#FDCB6E] hover:text-[#FDCB6E]'
@@ -296,7 +420,7 @@ const FindTutor = () => {
                             <span className="font-medium">Trình độ</span>
                         </button>
                         <button
-                            onClick={() => setFilters({ ...filters, price: filters.price ? '' : 'active' })}
+                            onClick={() => toggleDropdown('price')}
                             className={`flex items-center space-x-2 px-4 py-3 rounded-lg border transition-all duration-200 ${filters.price
                                 ? 'bg-[#FFF3E0] border-[#FDCB6E] text-[#FDCB6E]'
                                 : 'bg-white border-gray-300 text-gray-600 hover:border-[#FDCB6E] hover:text-[#FDCB6E]'
@@ -306,7 +430,7 @@ const FindTutor = () => {
                             <span className="font-medium">Giá cả</span>
                         </button>
                         <button
-                            onClick={() => setFilters({ ...filters, rating: filters.rating ? '' : 'active' })}
+                            onClick={() => toggleDropdown('rating')}
                             className={`flex items-center space-x-2 px-4 py-3 rounded-lg border transition-all duration-200 ${filters.rating
                                 ? 'bg-[#FFF3E0] border-[#FDCB6E] text-[#FDCB6E]'
                                 : 'bg-white border-gray-300 text-gray-600 hover:border-[#FDCB6E] hover:text-[#FDCB6E]'
@@ -320,74 +444,92 @@ const FindTutor = () => {
 
                 {/* Results Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {/* Class Cards */}
-                    <div className="lg:col-span-2 xl:col-span-3">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-xl font-semibold text-gray-900">Lớp học (3)</h2>
-                            <a href="#" className="text-[#FDCB6E] font-medium hover:text-[#E6B15C] transition-colors">Xem tất cả</a>
+                    {/* Class Cards - Only show when "Tất cả" or "Lớp học" is selected */}
+                    {shouldShowSection('Lớp học') && (
+                        <div className="lg:col-span-2 xl:col-span-3">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-xl font-semibold text-gray-900">
+                                    Lớp học ({getFilteredTutors().length})
+                                </h2>
+                                <a href="#" className="text-[#FDCB6E] font-medium hover:text-[#E6B15C] transition-colors">Xem tất cả</a>
+                            </div>
+                            {getFilteredTutors().length > 0 ? (
+                                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+                                    {getFilteredTutors().map((tutor) => (
+                                        <TutorCard key={tutor.id} tutor={tutor} />
+                                    ))}
+                                </div>
+                            ) : filters.subject ? (
+                                <EmptyState message="Sẽ được cập nhật sau" />
+                            ) : null}
                         </div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-                            {tutors.map((tutor) => (
-                                <TutorCard key={tutor.id} tutor={tutor} />
-                            ))}
-                        </div>
-                    </div>
+                    )}
 
-                    {/* Articles Section */}
-                    <div className="lg:col-span-2 xl:col-span-3">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-xl font-semibold text-gray-900">Bài viết (2)</h2>
-                            <a href="#" className="text-[#FDCB6E] font-medium hover:text-[#E6B15C] transition-colors">Xem tất cả</a>
-                        </div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-2">Phương pháp học Toán hiệu quả cho học sinh THPT</h3>
-                                <p className="text-gray-600 mb-4">bởi Nguyễn Thị Hương</p>
-                                <div className="flex items-center justify-between text-sm text-gray-500">
-                                    <span>2 ngày trước • 5 phút • 650 lượt xem</span>
+                    {/* Articles Section - Only show when "Tất cả" or "Bài viết" is selected */}
+                    {shouldShowSection('Bài viết') && (
+                        <div className="lg:col-span-2 xl:col-span-3">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-xl font-semibold text-gray-900">Bài viết (2)</h2>
+                                <a href="#" className="text-[#FDCB6E] font-medium hover:text-[#E6B15C] transition-colors">Xem tất cả</a>
+                            </div>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Phương pháp học Toán hiệu quả cho học sinh THPT</h3>
+                                    <p className="text-gray-600 mb-4">bởi Nguyễn Thị Hương</p>
+                                    <div className="flex items-center justify-between text-sm text-gray-500">
+                                        <span>2 ngày trước • 5 phút • 650 lượt xem</span>
+                                    </div>
+                                </div>
+                                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300">
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Kinh nghiệm dạy lập trình cho người mới bắt đầu</h3>
+                                    <p className="text-gray-600 mb-4">bởi Trần Văn Minh</p>
+                                    <div className="flex items-center justify-between text-sm text-gray-500">
+                                        <span>1 tuần trước • 8 phút • 1200 lượt xem</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300">
-                                <h3 className="text-lg font-semibold text-gray-900 mb-2">Kinh nghiệm dạy lập trình cho người mới bắt đầu</h3>
-                                <p className="text-gray-600 mb-4">bởi Trần Văn Minh</p>
-                                <div className="flex items-center justify-between text-sm text-gray-500">
-                                    <span>1 tuần trước • 8 phút • 1200 lượt xem</span>
-                                </div>
-                            </div>
                         </div>
-                    </div>
+                    )}
 
-                    {/* Teachers Section */}
-                    <div className="lg:col-span-2 xl:col-span-3">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-xl font-semibold text-gray-900">Gia sư (3)</h2>
-                            <a href="#" className="text-[#FDCB6E] font-medium hover:text-[#E6B15C] transition-colors">Xem tất cả</a>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {tutors.map((tutor) => (
-                                <div key={`teacher-${tutor.id}`} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition-all duration-300">
-                                    <div className={`w-20 h-20 ${tutor.bgColor} rounded-full flex items-center justify-center text-white font-semibold text-2xl mx-auto mb-4`}>
-                                        {tutor.avatar}
-                                    </div>
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-1">{tutor.name}</h3>
-                                    <div className="flex items-center justify-center space-x-1 mb-2">
-                                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                                        <span className="text-sm font-medium text-gray-900">{tutor.rating}</span>
-                                        <span className="text-sm text-gray-500">({tutor.reviews})</span>
-                                    </div>
-                                    <p className="text-gray-600 text-sm mb-4">{tutor.experience}</p>
-                                    <div className="flex space-x-2">
-                                        <button className="flex-1 px-3 py-2 border border-[#FDCB6E] text-[#FDCB6E] rounded-lg hover:bg-[#FDCB6E] hover:text-white transition-all duration-200 text-sm font-medium">
-                                            Đặt lịch
-                                        </button>
-                                        <button className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 text-sm font-medium">
-                                            Nhắn tin
-                                        </button>
-                                    </div>
+                    {/* Teachers Section - Only show when "Tất cả" or "Gia sư" is selected */}
+                    {shouldShowSection('Gia sư') && (
+                        <div className="lg:col-span-2 xl:col-span-3">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-xl font-semibold text-gray-900">
+                                    Gia sư ({getFilteredTutors().length})
+                                </h2>
+                                <a href="#" className="text-[#FDCB6E] font-medium hover:text-[#E6B15C] transition-colors">Xem tất cả</a>
+                            </div>
+                            {getFilteredTutors().length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {getFilteredTutors().map((tutor) => (
+                                        <div key={`teacher-${tutor.id}`} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition-all duration-300">
+                                            <div className={`w-20 h-20 ${tutor.bgColor} rounded-full flex items-center justify-center text-white font-semibold text-2xl mx-auto mb-4`}>
+                                                {tutor.avatar}
+                                            </div>
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-1">{tutor.name}</h3>
+                                            <div className="flex items-center justify-center space-x-1 mb-2">
+                                                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                                                <span className="text-sm font-medium text-gray-900">{tutor.rating}</span>
+                                                <span className="text-sm text-gray-500">({tutor.reviews})</span>
+                                            </div>
+                                            <p className="text-gray-600 text-sm mb-4">{tutor.experience}</p>
+                                            <div className="flex space-x-2">
+                                                <button className="flex-1 px-3 py-2 border border-[#FDCB6E] text-[#FDCB6E] rounded-lg hover:bg-[#FDCB6E] hover:text-white transition-all duration-200 text-sm font-medium">
+                                                    Đặt lịch
+                                                </button>
+                                                <button className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 text-sm font-medium">
+                                                    Nhắn tin
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+                            ) : filters.subject ? (
+                                <EmptyState message="Sẽ được cập nhật sau" />
+                            ) : null}
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>
