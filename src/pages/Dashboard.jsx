@@ -208,16 +208,23 @@ const Dashboard = () => {
             {/* Header */}
             <header className="bg-white border-b border-gray-200 px-6 py-4">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-8">
+                    {/* Logo */}
+                    <div className="flex-1">
                         <h1 className="text-2xl font-bold text-[#FDCB6E]">Edumentors</h1>
-                        <nav className="flex space-x-6">
+                    </div>
+
+                    {/* Centered Navigation */}
+                    <div className="flex-1 flex justify-center">
+                        <nav className="flex space-x-8">
                             <a href="#" className="text-[#FDCB6E] font-medium border-b-2 border-[#FDCB6E] pb-2">Dashboard</a>
                             <a href="#" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">Find a tutor</a>
                             <a href="#" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">My Bookings</a>
                             <a href="#" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">Messages</a>
                         </nav>
                     </div>
-                    <div className="flex items-center space-x-4">
+
+                    {/* Right Side - User Actions */}
+                    <div className="flex-1 flex items-center justify-end space-x-4">
                         <Bell className="w-6 h-6 text-gray-600 cursor-pointer hover:text-[#FDCB6E] transition-colors duration-200" />
                         <UserDropdown />
                     </div>
