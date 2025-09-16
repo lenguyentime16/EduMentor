@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Bell, ChevronLeft, ChevronRight, Calendar, Clock, User, Settings, HelpCircle, LogOut, ChevronDown } from 'lucide-react';
 import Button from '../components/ui/Button';
 
@@ -217,7 +218,7 @@ const Dashboard = () => {
                     <div className="flex-1 flex justify-center">
                         <nav className="flex space-x-8">
                             <a href="#" className="text-[#FDCB6E] font-medium border-b-2 border-[#FDCB6E] pb-2">Dashboard</a>
-                            <a href="#" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">Find a tutor</a>
+                            <Link to="/find-tutor" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">Find a tutor</Link>
                             <a href="#" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">My Bookings</a>
                             <a href="#" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">Messages</a>
                         </nav>
@@ -311,9 +312,11 @@ const Dashboard = () => {
                             </div>
                             <p className="text-gray-600 font-medium">No sessions booked</p>
                             <p className="text-gray-500 text-sm mt-1 mb-4">Your booked sessions will appear here</p>
-                            <Button className="bg-[#FDCB6E] hover:bg-[#E6B15C] text-white text-sm px-4 py-2">
-                                Browse Tutors
-                            </Button>
+                            <Link to="/find-tutor">
+                                <Button className="bg-[#FDCB6E] hover:bg-[#E6B15C] text-white text-sm px-4 py-2">
+                                    Browse Tutors
+                                </Button>
+                            </Link>
                         </div>
                     </div>
 

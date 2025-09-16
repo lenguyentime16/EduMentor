@@ -14,6 +14,7 @@ import CTASection from './components/sections/CTASection';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import FindTutor from './pages/FindTutor';
 
 // Landing Page Component
 const LandingPage = () => {
@@ -48,6 +49,9 @@ function App() {
 
         {/* Dashboard Route */}
         <Route path="/dashboard" element={<Dashboard />} />
+
+        {/* Find Tutor Route */}
+        <Route path="/find-tutor" element={<FindTutor />} />
 
         {/* Landing Page Route */}
         <Route path="/landing" element={<LandingPage />} />        {/* Catch all route - redirect to login */}
