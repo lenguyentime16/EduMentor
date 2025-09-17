@@ -219,7 +219,7 @@ const Dashboard = () => {
                         <nav className="flex space-x-8">
                             <a href="#" className="text-[#FDCB6E] font-medium border-b-2 border-[#FDCB6E] pb-2">Dashboard</a>
                             <Link to="/find-tutor" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">Find a tutor</Link>
-                            <a href="#" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">My Bookings</a>
+                            <Link to="/my-bookings" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">My Bookings</Link>
                             <a href="#" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">Messages</a>
                         </nav>
                     </div>

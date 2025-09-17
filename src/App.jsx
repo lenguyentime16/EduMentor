@@ -15,6 +15,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import FindTutor from './pages/FindTutor';
+import MyBookings from './pages/MyBookings';   
+
 
 // Landing Page Component
 const LandingPage = () => {
@@ -56,6 +58,11 @@ function App() {
         {/* Landing Page Route */}
         <Route path="/landing" element={<LandingPage />} />        {/* Catch all route - redirect to login */}
         <Route path="*" element={<Navigate to="/login" replace />} />
+       
+        {/* My Bookings Route */}
+        <Route path="/my-bookings" element={<MyBookings />} />
+
+
       </Routes>
     </Router>
   );
