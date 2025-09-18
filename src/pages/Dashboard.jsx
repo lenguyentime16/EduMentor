@@ -5,8 +5,9 @@ import Button from '../components/ui/Button';
 import { ChevronLeft, ChevronRight, Calendar, Clock } from 'lucide-react';
 
 const Dashboard = () => {
-    const [currentDate, setCurrentDate] = useState(new Date(2025, 6, 24)); // July 24, 2025
-    const [selectedDate, setSelectedDate] = useState(24);
+    const today = new Date();
+    const [currentDate, setCurrentDate] = useState(today);
+    const [selectedDate, setSelectedDate] = useState(today.getDate());
     const [isTransitioning, setIsTransitioning] = useState(false);
 
     // Calendar helper functions
@@ -19,11 +20,11 @@ const Dashboard = () => {
     };
 
     const monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
+        'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
+        'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
     ];
 
-    const dayNames = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+    const dayNames = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 
     const renderCalendar = () => {
         const daysInMonth = getDaysInMonth(currentDate);
@@ -51,7 +52,9 @@ const Dashboard = () => {
         // Current month's days
         for (let day = 1; day <= daysInMonth; day++) {
             const isSelected = day === selectedDate;
-            const isToday = day === 24; // Assuming today is 24th for demo
+            const isToday = day === today.getDate() &&
+                currentDate.getMonth() === today.getMonth() &&
+                currentDate.getFullYear() === today.getFullYear();
 
             days.push(
                 <div
@@ -102,8 +105,9 @@ const Dashboard = () => {
     };
 
     const goToToday = () => {
-        setCurrentDate(new Date(2025, 6, 24)); // July 24, 2025
-        setSelectedDate(24);
+        const today = new Date();
+        setCurrentDate(today);
+        setSelectedDate(today.getDate());
     };
 
     return (
@@ -117,7 +121,7 @@ const Dashboard = () => {
                 <div className="flex-1 p-8">
                     <div className="bg-white rounded-lg shadow-sm p-8 max-w-5xl mx-auto">
                         <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-2xl font-semibold text-gray-900">My Schedule</h2>
+                            <h2 className="text-2xl font-semibold text-gray-900">Lịch trình của tôi</h2>
                             <div className="flex items-center space-x-4">
                                 <div className="flex items-center space-x-2">
                                     <button
@@ -140,7 +144,7 @@ const Dashboard = () => {
                                     onClick={goToToday}
                                     className="bg-[#FDCB6E] hover:bg-[#E6B15C] text-white text-sm px-4 py-2 transition-all duration-200 hover:shadow-lg"
                                 >
-                                    Today
+                                    Hôm nay
                                 </Button>
                             </div>
                         </div>
@@ -169,31 +173,31 @@ const Dashboard = () => {
                 <div className="w-80 p-6 space-y-6">
                     {/* Action Centre */}
                     <div className="bg-white rounded-lg shadow-sm p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Action centre</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Trung tâm thông báo</h3>
                         <div className="text-center py-8">
                             <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                                 <Calendar className="w-8 h-8 text-gray-400" />
                             </div>
-                            <p className="text-gray-600 font-medium">No action required</p>
-                            <p className="text-gray-500 text-sm mt-1">You're all set for now.</p>
+                            <p className="text-gray-600 font-medium">Không có thông báo</p>
+                            <p className="text-gray-500 text-sm mt-1">Bạn đã hoàn thành tất cả.</p>
                         </div>
                     </div>
 
                     {/* Upcoming Sessions */}
                     <div className="bg-white rounded-lg shadow-sm p-6">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-semibold text-gray-900">Upcoming sessions</h3>
-                            <a href="#" className="text-[#FDCB6E] text-sm font-medium hover:text-[#E6B15C]">See all</a>
+                            <h3 className="text-lg font-semibold text-gray-900">Buổi học sắp tới</h3>
+                            <a href="#" className="text-[#FDCB6E] text-sm font-medium hover:text-[#E6B15C]">Xem tất cả</a>
                         </div>
                         <div className="text-center py-8">
                             <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                                 <Clock className="w-8 h-8 text-gray-400" />
                             </div>
-                            <p className="text-gray-600 font-medium">No sessions booked</p>
-                            <p className="text-gray-500 text-sm mt-1 mb-4">Your booked sessions will appear here</p>
+                            <p className="text-gray-600 font-medium">Chưa có buổi học nào</p>
+                            <p className="text-gray-500 text-sm mt-1 mb-4">Các buổi học đã đặt sẽ hiển thị ở đây</p>
                             <Link to="/find-tutor">
                                 <Button className="bg-[#FDCB6E] hover:bg-[#E6B15C] text-white text-sm px-4 py-2">
-                                    Browse Tutors
+                                    Tìm gia sư
                                 </Button>
                             </Link>
                         </div>
@@ -203,19 +207,19 @@ const Dashboard = () => {
                     <div className="space-y-4">
                         {/* Amazon Gift Card */}
                         <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg p-4 text-white">
-                            <h4 className="font-semibold mb-2">Get a £50 Amazon Gift Card</h4>
-                            <p className="text-sm text-purple-100 mb-3">when you refer a friend</p>
+                            <h4 className="font-semibold mb-2">Nhận thẻ quà tặng 1.200.000đ</h4>
+                            <p className="text-sm text-purple-100 mb-3">khi bạn giới thiệu bạn bè</p>
                             <Button className="bg-white text-purple-600 hover:bg-gray-100 text-sm px-4 py-2">
-                                Learn more
+                                Tìm hiểu thêm
                             </Button>
                         </div>
 
                         {/* GCSE Essays Feedback */}
                         <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg p-4 text-white">
-                            <h4 className="font-semibold mb-2">Get feedback on your GCSE ESSAYS</h4>
-                            <p className="text-sm text-blue-100 mb-3">MarkMyGCSE</p>
+                            <h4 className="font-semibold mb-2">Nhận phản hồi cho bài luận của bạn</h4>
+                            <p className="text-sm text-blue-100 mb-3">Dịch vụ chấm bài EduMentor</p>
                             <Button className="bg-white text-blue-600 hover:bg-gray-100 text-sm px-4 py-2">
-                                Try now
+                                Thử ngay
                             </Button>
                         </div>
                     </div>
