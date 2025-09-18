@@ -170,12 +170,24 @@ const Dashboard = () => {
                     {/* Action Centre */}
                     <div className="bg-white rounded-lg shadow-sm p-6">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Action centre</h3>
-                        <div className="text-center py-8">
-                            <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                                <Calendar className="w-8 h-8 text-gray-400" />
+                        <div className="space-y-3">
+                            <Link to="/payment" className="block">
+                                <div className="border border-gray-200 rounded-lg p-4 hover:border-orange-300 hover:bg-orange-50 transition-all duration-200 cursor-pointer">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-10 h-10 bg-orange-200 rounded-lg flex items-center justify-center">
+                                            <Calendar className="w-5 h-5 text-orange-600" />
+                                        </div>
+                                        <div>
+                                            <p className="font-medium text-gray-900">Booking Session</p>
+                                            <p className="text-sm text-gray-600">Complete your session payment</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                            
+                            <div className="text-center py-4">
+                                <p className="text-gray-500 text-sm">Click above to complete your booking payment</p>
                             </div>
-                            <p className="text-gray-600 font-medium">No action required</p>
-                            <p className="text-gray-500 text-sm mt-1">You're all set for now.</p>
                         </div>
                     </div>
 

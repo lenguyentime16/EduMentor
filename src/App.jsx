@@ -15,7 +15,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import FindTutor from './pages/FindTutor';
-import MyBookings from './pages/MyBookings';   
+import MyBookings from './pages/MyBookings';
+import Payment from './pages/Payment';
+import PaymentMethod from './pages/PaymentMethod';
+import Confirmation from './pages/Confirmation';
+import PaymentSuccess from './pages/PaymentSuccess';   
 
 
 // Landing Page Component
@@ -62,6 +66,17 @@ function App() {
         {/* My Bookings Route */}
         <Route path="/my-bookings" element={<MyBookings />} />
 
+        {/* Payment Route */}
+        <Route path="/payment" element={<Payment />} />
+
+        {/* Payment Method Route */}
+        <Route path="/payment-method" element={<PaymentMethod />} />
+
+        {/* Confirmation Route */}
+        <Route path="/confirmation" element={<Confirmation />} />
+
+        {/* Payment Success Route */}
+        <Route path="/payment-success" element={<PaymentSuccess />} />
 
       </Routes>
     </Router>
