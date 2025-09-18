@@ -117,36 +117,48 @@ const Header = ({ currentPage = 'Dashboard' }) => {
           <nav className="flex space-x-8">
             <Link
               to="/dashboard"
-              className={`${currentPage === 'Dashboard'
-                ? 'text-[#FDCB6E] font-medium border-b-2 border-[#FDCB6E] pb-2'
-                : 'text-gray-600 hover:text-[#FDCB6E] transition-colors'
+              className={`relative pb-2 transition-all duration-300 ${currentPage === 'Dashboard'
+                ? 'text-[#FDCB6E] font-medium'
+                : 'text-gray-600 hover:text-[#FDCB6E]'
+                } ${currentPage === 'Dashboard'
+                  ? 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#FDCB6E] after:transform after:scale-x-100'
+                  : 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#FDCB6E] after:transform after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300'
                 }`}
             >
               Dashboard
             </Link>
             <Link
               to="/find-tutor"
-              className={`${currentPage === 'Find a tutor'
-                ? 'text-[#FDCB6E] font-medium border-b-2 border-[#FDCB6E] pb-2'
-                : 'text-gray-600 hover:text-[#FDCB6E] transition-colors'
+              className={`relative pb-2 transition-all duration-300 ${currentPage === 'Find a tutor'
+                ? 'text-[#FDCB6E] font-medium'
+                : 'text-gray-600 hover:text-[#FDCB6E]'
+                } ${currentPage === 'Find a tutor'
+                  ? 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#FDCB6E] after:transform after:scale-x-100'
+                  : 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#FDCB6E] after:transform after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300'
                 }`}
             >
               Find a tutor
             </Link>
             <Link
               to="/my-bookings"
-              className={`${currentPage === 'My Bookings'
-                ? 'text-[#FDCB6E] font-medium border-b-2 border-[#FDCB6E] pb-2'
-                : 'text-gray-600 hover:text-[#FDCB6E] transition-colors'
+              className={`relative pb-2 transition-all duration-300 ${currentPage === 'My Bookings'
+                ? 'text-[#FDCB6E] font-medium'
+                : 'text-gray-600 hover:text-[#FDCB6E]'
+                } ${currentPage === 'My Bookings'
+                  ? 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#FDCB6E] after:transform after:scale-x-100'
+                  : 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#FDCB6E] after:transform after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300'
                 }`}
             >
               My Bookings
             </Link>
             <Link
               to="/messages"
-              className={`${currentPage === 'Messages'
-                ? 'text-[#FDCB6E] font-medium border-b-2 border-[#FDCB6E] pb-2'
-                : 'text-gray-600 hover:text-[#FDCB6E] transition-colors'
+              className={`relative pb-2 transition-all duration-300 ${currentPage === 'Messages'
+                ? 'text-[#FDCB6E] font-medium'
+                : 'text-gray-600 hover:text-[#FDCB6E]'
+                } ${currentPage === 'Messages'
+                  ? 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#FDCB6E] after:transform after:scale-x-100'
+                  : 'after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#FDCB6E] after:transform after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300'
                 }`}
             >
               Messages
