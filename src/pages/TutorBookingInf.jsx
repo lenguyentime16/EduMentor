@@ -1,0 +1,396 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { 
+    Bell, 
+    User, 
+    ChevronDown, 
+    Settings, 
+    HelpCircle, 
+    LogOut, 
+    Star, 
+    ArrowLeft,
+    Check,
+    MapPin,
+    Clock,
+    BookOpen,
+    Award,
+    Calendar
+} from 'lucide-react';
+
+const TutorBookingInf = () => {
+    const { tutorId } = useParams();
+    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+    const [selectedPackage, setSelectedPackage] = useState(null);
+    const dropdownRef = useRef(null);
+
+    // Dữ liệu gia sư mẫu - trong ứng dụng thực tế sẽ được lấy dựa trên tutorId
+    const tutor = {
+        id: 1,
+        name: "Oryna L.",
+        avatar: "/tutor-profile-pic.png",
+        rating: 4.8,
+        reviews: 127,
+        experience: "5 năm kinh nghiệm",
+        languages: "Tiếng Anh, Tiếng Nga",
+        location: "21 tuổi",
+        about: "Xin chào! Tên tôi là Oryna và tôi là sinh viên ngành Kinh tế và Phát triển Bền vững tại trường đại học. Tuy nhiên, trong quá trình học, tôi đã tiếp xúc với nhiều môn học khác nhau như tiếng Anh, lịch sử, sinh học, v.v. Tôi đã dạy kèm cho các em nhỏ trong 3 năm với nhiều độ tuổi khác nhau (toán, sinh học, hóa học, vật lý). Tôi thực sự thích công việc này và nó giúp tôi tiếp tục việc học. Tôi luôn nhiệt tình giúp đỡ mọi người và trả lời mọi câu hỏi họ có thể có.",
+        verified: true,
+        pros: true,
+        featured: true,
+        qualifications: [
+            { subject: "Môn học/Cố vấn", level: "Trình độ" },
+            { subject: "Toán", level: "A Level Early Years, GCSE, KS2, KS1, KS3" },
+            { subject: "Toán nâng cao", level: "GCSE" },
+            { subject: "Khoa học", level: "Early Years, GCSE, KS1, KS2, KS3" },
+            { subject: "Kinh tế", level: "A Level, GCSE" },
+            { subject: "Sinh học", level: "Early Years, GCSE, KS1, KS2, KS3" },
+            { subject: "Hóa học", level: "Early Years, GCSE, KS1, KS2, KS3" },
+            { subject: "Vật lý", level: "Early Years, GCSE, KS1, KS2, KS3" },
+            { subject: "Tiếng Đức", level: "Nâng cao" },
+            { subject: "Chiến lược học tập", level: "Nâng cao" }
+        ],
+        packages: [
+            { id: 1, duration: "1h", sessions: 1, price: 45, discounts: "Giảm giá mới trị giá 8" },
+            { id: 2, duration: "1h", sessions: 2, price: 89, discounts: "Giảm giá được áp dụng tự động" },
+            { id: 3, duration: "30 phút", sessions: 1, price: 25, discounts: "Ưu đãi thử nghiệm tốt nhất với 1" },
+            { id: 4, duration: "1.5h", sessions: 1, price: 67, discounts: "Gặp gia sư của bạn. 1.5h dịch vụ của chúng tôi" }
+        ],
+        reviews: [
+            {
+                id: 1,
+                name: "Grace B.",
+                rating: 5,
+                comment: "Con tôi đã giỏi toán hơn nhờ Oryna, em hiểu nhiều hơn so với lúc cô ấy bắt đầu dạy."
+            },
+            {
+                id: 2,
+                name: "Margaret E.",
+                rating: 5,
+                comment: "Con gái tôi đã có trải nghiệm tích cực với Oryna. Các buổi dạy kèm được cấu trúc và hữu ích cho việc học tập sau này. Cảm ơn Oryna."
+            }
+        ],
+        totalRating: 4.7,
+        trustPilotReviews: [
+            {
+                name: "Gary R.",
+                comment: "Gia sư này rất chuyên nghiệp và đến chuẩn bị đầy đủ. Tôi thực sự vui mừng khi thấy cô ấy đã học được những điều tôi chưa từng nghĩ đến. Đánh dấu cao hơn bất kỳ giáo viên nào khác ở trường, rất khuyến khích."
+            },
+            {
+                name: "John M.",
+                comment: "Đại diện cho nền tảng xuất sắc để khám phá và nâng cao giáo dục gia đình. Các gia sư được đào tạo kỹ lưỡng thông qua quy trình ứng dụng nghiêm ngặt để cung cấp dạy kèm xuất sắc cho con em bạn..."
+            }
+        ]
+    };
+
+    // Xử lý click bên ngoài dropdown
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsUserDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    // Component Dropdown Người dùng
+    const UserDropdown = () => (
+        <div ref={dropdownRef} className="relative">
+            <button
+                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                className="flex items-center space-x-2 hover:bg-gray-50 rounded-lg p-2 transition-all duration-200"
+            >
+                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+                    N
+                </div>
+                <div className="hidden md:block text-left">
+                    <div className="text-sm font-medium text-gray-900">Welcome, Nguyên</div>
+                    <div className="text-xs text-gray-500">lenguyentime16@gmail.com</div>
+                </div>
+                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {isUserDropdownOpen && (
+                <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <div className="px-4 py-3 border-b border-gray-100">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                                N
+                            </div>
+                            <div>
+                                <p className="font-medium text-gray-900">Welcome, Nguyên</p>
+                                <p className="text-sm text-gray-500">lenguyentime16@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="py-2">
+                        <button className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
+                            <User className="w-5 h-5 text-gray-500" />
+                            <span className="text-gray-700 font-medium">Thông tin cá nhân</span>
+                        </button>
+                        <button className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
+                            <Settings className="w-5 h-5 text-gray-500" />
+                            <span className="text-gray-700 font-medium">Cài đặt tài khoản</span>
+                        </button>
+                    </div>
+
+                    <div className="border-t border-gray-100 my-2"></div>
+
+                    <div className="py-2">
+                        <button className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150">
+                            <span className="text-gray-700 font-medium">Câu hỏi thường gặp</span>
+                        </button>
+                        <button className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150">
+                            <span className="text-gray-700 font-medium">Điều khoản và điều kiện</span>
+                        </button>
+                        <button className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150">
+                            <span className="text-gray-700 font-medium">Chính sách bảo mật</span>
+                        </button>
+                        <button className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
+                            <HelpCircle className="w-5 h-5 text-gray-500" />
+                            <span className="text-gray-700 font-medium">Trợ giúp và hỗ trợ</span>
+                        </button>
+                    </div>
+
+                    <div className="border-t border-gray-100 my-2"></div>
+
+                    <div className="px-4 py-2">
+                        <button className="w-full bg-[#FDF3E1] text-[#FDCB6E] rounded-lg py-3 px-4 font-medium hover:bg-[#FCF0D0] transition-all duration-200 flex items-center justify-center space-x-2">
+                            <LogOut className="w-4 h-4" />
+                            <span>Đăng xuất</span>
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+
+    return (
+        <div className="min-h-screen bg-gray-50">
+            {/* Header */}
+            <header className="bg-white shadow-sm border-b">
+                <div className="max-w-7xl mx-auto px-6 py-4">
+                    <div className="flex items-center justify-between">
+                        <div className="text-2xl font-bold text-[#FDCB6E]">Edumentors</div>
+                    
+                        <nav className="flex items-center space-x-8">
+                            <Link to="/dashboard" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">
+                                Dashboard
+                            </Link>
+                            <Link to="/find-tutor" className="text-[#FDCB6E] font-medium transition-colors">
+                                Find a tutor
+                            </Link>
+                            <Link to="/my-bookings" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">
+                                My Bookings
+                            </Link>
+                            <Link to="/messages" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">
+                                Messages
+                            </Link>
+                        </nav>
+
+                        <div className="flex items-center space-x-4">
+                            <Bell className="w-6 h-6 text-gray-600 cursor-pointer hover:text-[#FDCB6E] transition-colors duration-200" />
+                            <UserDropdown />
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            {/* Nội dung chính */}
+            <div className="max-w-7xl mx-auto px-6 py-8">
+                {/* Nút quay lại */}
+                <Link to="/find-tutor" className="inline-flex items-center text-gray-600 hover:text-gray-800 mb-6">
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Quay lại tìm kiếm
+                </Link>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Nội dung bên trái - Hồ sƠ gia sư */}
+                    <div className="lg:col-span-2">
+                        {/* Tutor Header */}
+                        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-6">
+                            <div className="flex items-start space-x-6">
+                                <div className="relative">
+                                    <img 
+                                        src={tutor.avatar} 
+                                        alt={tutor.name}
+                                        className="w-24 h-24 rounded-full object-cover"
+                                        onError={(e) => {
+                                            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGNENCNkUiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiPgo8cGF0aCBkPSJtMjAgNy0zIDEgMi00LTQgMnptLTIgMi0zIDEgMi00LTQgMnptLTEwIDEtMyAxIDItNC00IDJ6bS01IDYtMyAxIDItNC00IDJ6Ii8+Cjwvc3ZnPgo8L3N2Zz4K';
+                                        }}
+                                    />
+                                    {tutor.verified && (
+                                        <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1">
+                                            <Check className="w-3 h-3 text-white" />
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="flex-1">
+                                    <div className="flex items-center space-x-3 mb-2">
+                                        <h1 className="text-2xl font-bold text-gray-900">{tutor.name}</h1>
+                                        <div className="flex items-center space-x-1">
+                                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                                            <span className="text-sm font-medium text-gray-900">{tutor.rating}</span>
+                                        </div>
+                                        {tutor.verified && (
+                                            <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Đã xác minh</span>
+                                        )}
+                                        {tutor.pros && (
+                                            <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Chuyên gia</span>
+                                        )}
+                                        {tutor.featured && (
+                                            <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Nổi bật</span>
+                                        )}
+                                    </div>
+
+                                    <p className="text-gray-600 mb-4">Nếu bạn cần đặt lịch học với tôi</p>
+
+                                    <div className="grid grid-cols-3 gap-4 text-sm">
+                                        <div className="flex items-center space-x-2">
+                                            <Clock className="w-4 h-4 text-gray-400" />
+                                            <span className="text-gray-600">{tutor.location}</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <BookOpen className="w-4 h-4 text-gray-400" />
+                                            <span className="text-gray-600">{tutor.experience}</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <MapPin className="w-4 h-4 text-gray-400" />
+                                            <span className="text-gray-600">{tutor.languages}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Giới thiệu về tôi */}
+                        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-6">
+                            <h2 className="text-xl font-bold text-gray-900 mb-4">Giới thiệu về tôi</h2>
+                            <p className="text-gray-700 leading-relaxed">{tutor.about}</p>
+                        </div>
+
+                        {/* Bằng cấp */}
+                        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-6">
+                            <h2 className="text-xl font-bold text-gray-900 mb-4">Bằng cấp</h2>
+                            <div className="space-y-3">
+                                {tutor.qualifications.map((qual, index) => (
+                                    <div key={index} className="grid grid-cols-2 gap-4 py-2 border-b border-gray-100 last:border-b-0">
+                                        <div className="font-medium text-gray-900">{qual.subject}</div>
+                                        <div className="text-gray-600">{qual.level}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Đánh giá */}
+                        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-6">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-xl font-bold text-gray-900">Đánh giá 4.8</h2>
+                                <div className="flex items-center space-x-1">
+                                    {[1,2,3,4,5].map((star) => (
+                                        <Star key={star} className="w-5 h-5 text-yellow-400 fill-current" />
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="space-y-6">
+                                {tutor.reviews.map((review) => (
+                                    <div key={review.id} className="border-b border-gray-100 pb-6 last:border-b-0">
+                                        <div className="flex items-center space-x-3 mb-3">
+                                            <div className="w-10 h-10 bg-[#FDCB6E] rounded-full flex items-center justify-center text-white font-semibold">
+                                                {review.name.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <div className="font-medium text-gray-900">{review.name}</div>
+                                                <div className="flex items-center space-x-1">
+                                                    {[1,2,3,4,5].map((star) => (
+                                                        <Star key={star} className="w-3 h-3 text-yellow-400 fill-current" />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p className="text-gray-700">{review.comment}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Đánh giá TrustPilot */}
+                        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                            <h2 className="text-xl font-bold text-gray-900 mb-4">TrustPilot 4.7</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {tutor.trustPilotReviews.map((review, index) => (
+                                    <div key={index} className="space-y-3">
+                                        <div className="flex items-center space-x-3">
+                                            <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-white font-semibold">
+                                                {review.name.charAt(0)}
+                                            </div>
+                                            <div className="font-medium text-gray-900">{review.name}</div>
+                                        </div>
+                                        <p className="text-gray-700 text-sm">{review.comment}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Sidebar bên phải - Đặt lịch */}
+                    <div className="lg:col-span-1">
+                        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-6">
+                            <h3 className="text-lg font-bold text-gray-900 mb-4">Đặt lịch với Oryna L.</h3>
+                            
+                            <div className="space-y-4 mb-6">
+                                {tutor.packages.map((pkg) => (
+                                    <div 
+                                        key={pkg.id}
+                                        className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                                            selectedPackage?.id === pkg.id 
+                                                ? 'border-[#FDCB6E] bg-[#FDF9F0]' 
+                                                : 'border-gray-200 hover:border-gray-300'
+                                        }`}
+                                        onClick={() => setSelectedPackage(pkg)}
+                                    >
+                                        <div className="flex justify-between items-start mb-2">
+                                            <div>
+                                                <div className="font-semibold text-gray-900">£{pkg.price}</div>
+                                                <div className="text-sm text-gray-600">{pkg.duration} • {pkg.sessions} Buổi học</div>
+                                            </div>
+                                            <div className="text-xs text-[#FDCB6E] font-medium">140+</div>
+                                        </div>
+                                        <div className="text-sm text-gray-600">{pkg.discounts}</div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="space-y-3 mb-6">
+                                <button className="w-full bg-[#FDCB6E] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#E6B862] transition-colors">
+                                    Đặt buổi học thử miễn phí
+                                </button>
+                                <button className="w-full bg-[#FDCB6E] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#E6B862] transition-colors">
+                                    Đặt buổi học trả phí
+                                </button>
+                            </div>
+
+                            <div className="text-center text-sm text-gray-600 mb-4">
+                                Bạn đang tìm kiếm thứ gì cụ thể?
+                            </div>
+
+                            <Link to="/my-bookings" className="block">
+                                <button className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors text-sm">
+                                    Gửi tin nhắn
+                                </button>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default TutorBookingInf;

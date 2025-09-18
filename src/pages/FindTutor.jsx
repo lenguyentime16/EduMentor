@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Search, Filter, Star, Clock, MapPin, ChevronDown, Heart, MessageCircle } from 'lucide-react';
 import Header from '../components/layout/Header';
 
@@ -18,7 +19,7 @@ const FindTutor = () => {
         rating: false
     });
 
-    // Sample tutor data
+    // Dữ liệu gia sư mẫu
     const tutors = [
         {
             id: 1,
@@ -66,7 +67,7 @@ const FindTutor = () => {
 
     const subjects = ['Tất cả', 'Lớp học', 'Bài viết', 'Gia sư'];
 
-    // Subject options for dropdown
+    // Tùy chọn môn học cho dropdown
     const subjectOptions = [
         'Toán',
         'Ngữ Văn',
@@ -77,26 +78,26 @@ const FindTutor = () => {
         'Tin học - Lập trình'
     ];
 
-    // Function to check if a section should be shown based on active tab
+    // Hàm kiểm tra section nào nên hiển thị dựa trên tab đang active
     const shouldShowSection = (sectionType) => {
         if (activeTab === 'Tất cả') return true;
         return activeTab === sectionType;
     };
 
-    // Function to filter tutors based on selected subject
+    // Hàm lọc gia sư dựa trên môn học đã chọn
     const getFilteredTutors = () => {
-        console.log('Current filter subject:', filters.subject); // Debug log
-        console.log('All tutors:', tutors); // Debug log
+        console.log('Môn học filter hiện tại:', filters.subject); // Debug log
+        console.log('Tất cả gia sư:', tutors); // Debug log
         if (!filters.subject) return tutors;
         const filtered = tutors.filter(tutor => {
-            console.log(`Comparing: ${tutor.subjectCategory} === ${filters.subject}`); // Debug log
+            console.log(`So sánh: ${tutor.subjectCategory} === ${filters.subject}`); // Debug log
             return tutor.subjectCategory === filters.subject;
         });
-        console.log('Filtered tutors:', filtered); // Debug log
+        console.log('Gia sư đã lọc:', filtered); // Debug log
         return filtered;
     };
 
-    // Component for empty state
+    // Component cho trạng thái trống
     const EmptyState = ({ message }) => (
         <div className="lg:col-span-2 xl:col-span-3">
             <div className="text-center py-12">
@@ -109,7 +110,7 @@ const FindTutor = () => {
         </div>
     );
 
-    // Toggle dropdown function
+    // Hàm bật/tắt dropdown
     const toggleDropdown = (dropdownType) => {
         setDropdownStates(prev => ({
             ...prev,
@@ -117,15 +118,15 @@ const FindTutor = () => {
         }));
     };
 
-    // Handle subject selection
+    // Xử lý việc chọn môn học
     const handleSubjectSelect = (subject) => {
-        console.log('Selected subject:', subject); // Debug log
+        console.log('Môn học đã chọn:', subject); // Debug log
         setFilters(prev => {
             const newFilters = {
                 ...prev,
                 subject: subject
             };
-            console.log('New filters:', newFilters); // Debug log
+            console.log('Filters mới:', newFilters); // Debug log
             return newFilters;
         });
         setDropdownStates(prev => ({
@@ -135,79 +136,97 @@ const FindTutor = () => {
     };
 
     const TutorCard = ({ tutor }) => (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300 hover:scale-[1.02]">
-            <div className="flex items-start space-x-4">
-                {/* Avatar */}
-                <div className={`w-16 h-16 ${tutor.bgColor} rounded-full flex items-center justify-center text-white font-semibold text-xl`}>
-                    {tutor.avatar}
-                </div>
-
-                {/* Tutor Info */}
-                <div className="flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                        <div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-1">{tutor.name}</h3>
-                            <p className="text-gray-600 font-medium">{tutor.subject}</p>
-                        </div>
-                        <button className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
-                            <Heart className="w-5 h-5 text-gray-400 hover:text-red-500" />
-                        </button>
+        <Link to={`/tutor/${tutor.id}`} className="block">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                <div className="flex items-start space-x-4">
+                    {/* Ảnh đại diện */}
+                    <div className={`w-16 h-16 ${tutor.bgColor} rounded-full flex items-center justify-center text-white font-semibold text-xl`}>
+                        {tutor.avatar}
                     </div>
 
-                    {/* Rating and Reviews */}
-                    <div className="flex items-center space-x-2 mb-3">
-                        <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                            <span className="text-sm font-medium text-gray-900">{tutor.rating}</span>
-                        </div>
-                        <span className="text-sm text-gray-500">({tutor.reviews} đánh giá)</span>
-                        <span className="text-sm text-gray-400">•</span>
-                        <span className="text-sm text-gray-500">{tutor.experience}</span>
-                    </div>
-
-                    {/* Details */}
-                    <div className="space-y-2 mb-4">
-                        <div className="flex items-center space-x-2 text-sm text-gray-600">
-                            <MapPin className="w-4 h-4" />
-                            <span>{tutor.location}</span>
-                        </div>
-                        <div className="flex items-center space-x-2 text-sm text-gray-600">
-                            <Clock className="w-4 h-4" />
-                            <span>{tutor.time}</span>
-                        </div>
-                    </div>
-
-                    {/* Price and Actions */}
-                    <div className="flex items-center justify-between">
-                        <div className="text-[#FDCB6E] font-bold text-lg">
-                            {tutor.price} VNĐ/giờ
-                        </div>
-                        <div className="flex space-x-2">
-                            <button className="px-4 py-2 border border-[#FDCB6E] text-[#FDCB6E] rounded-lg hover:bg-[#FDCB6E] hover:text-white transition-all duration-200 font-medium">
-                                Nhắn tin
+                    {/* Thông tin gia sư */}
+                    <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-1">{tutor.name}</h3>
+                                <p className="text-gray-600 font-medium">{tutor.subject}</p>
+                            </div>
+                            <button 
+                                className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    // Handle favorite logic here
+                                }}
+                            >
+                                <Heart className="w-5 h-5 text-gray-400 hover:text-red-500" />
                             </button>
-                            <button className="px-4 py-2 bg-[#FDCB6E] text-white rounded-lg hover:bg-[#E6B15C] transition-all duration-200 font-medium">
-                                Đặt lịch
-                            </button>
+                        </div>
+
+                        {/* Đánh giá và Reviews */}
+                        <div className="flex items-center space-x-2 mb-3">
+                            <div className="flex items-center space-x-1">
+                                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                                <span className="text-sm font-medium text-gray-900">{tutor.rating}</span>
+                            </div>
+                            <span className="text-sm text-gray-500">({tutor.reviews} đánh giá)</span>
+                            <span className="text-sm text-gray-400">•</span>
+                            <span className="text-sm text-gray-500">{tutor.experience}</span>
+                        </div>
+
+                        {/* Chi tiết */}
+                        <div className="space-y-2 mb-4">
+                            <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                <MapPin className="w-4 h-4" />
+                                <span>{tutor.location}</span>
+                            </div>
+                            <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                <Clock className="w-4 h-4" />
+                                <span>{tutor.time}</span>
+                            </div>
+                        </div>
+
+                        {/* Giá và Hành động */}
+                        <div className="flex items-center justify-between">
+                            <div className="text-[#FDCB6E] font-bold text-lg">
+                                {tutor.price} VNĐ/giờ
+                            </div>
+                            <div className="flex space-x-2">
+                                <button 
+                                    className="px-4 py-2 border border-[#FDCB6E] text-[#FDCB6E] rounded-lg hover:bg-[#FDCB6E] hover:text-white transition-all duration-200 font-medium"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        // Handle message logic here
+                                    }}
+                                >
+                                    Nhắn tin
+                                </button>
+                                <div
+                                    className="px-4 py-2 bg-[#FDCB6E] text-white rounded-lg hover:bg-[#E6B15C] transition-all duration-200 font-medium text-center"
+                                >
+                                    Đặt lịch
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
-            <Header currentPage="Find a tutor" />
+            <Header currentPage="Tìm gia sư" />
 
-            {/* Main Content */}
+            {/* Nội dung chính */}
             <div className="max-w-7xl mx-auto px-6 py-8">
-                {/* Search Section */}
+                {/* Phần tìm kiếm */}
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-4">Tìm kiếm toàn diện</h1>
 
-                    {/* Search Bar */}
+                    {/* Thanh tìm kiếm */}
                     <div className="max-w-2xl mx-auto relative mb-6">
                         <div className="relative">
                             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -221,7 +240,7 @@ const FindTutor = () => {
                         </div>
                     </div>
 
-                    {/* Subject Tabs */}
+                    {/* Tab môn học */}
                     <div className="flex justify-center mb-6">
                         <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
                             {subjects.map((subject) => (
@@ -239,9 +258,9 @@ const FindTutor = () => {
                         </div>
                     </div>
 
-                    {/* Filters */}
+                    {/* Bộ lọc */}
                     <div className="flex justify-center space-x-4 mb-8">
-                        {/* Subject Dropdown */}
+                        {/* Dropdown môn học */}
                         <div className="relative">
                             <button
                                 onClick={() => toggleDropdown('subject')}
@@ -319,9 +338,9 @@ const FindTutor = () => {
                     </div>
                 </div>
 
-                {/* Results Section */}
+                {/* Phần kết quả */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {/* Class Cards - Only show when "Tất cả" or "Lớp học" is selected */}
+                    {/* Thẻ lớp học - Chỉ hiển thị khi "Tất cả" hoặc "Lớp học" được chọn */}
                     {shouldShowSection('Lớp học') && (
                         <div className="lg:col-span-2 xl:col-span-3">
                             <div className="flex items-center justify-between mb-6">
@@ -342,7 +361,7 @@ const FindTutor = () => {
                         </div>
                     )}
 
-                    {/* Articles Section - Only show when "Tất cả" or "Bài viết" is selected */}
+                    {/* Phần bài viết - Chỉ hiển thị khi "Tất cả" hoặc "Bài viết" được chọn */}
                     {shouldShowSection('Bài viết') && (
                         <div className="lg:col-span-2 xl:col-span-3">
                             <div className="flex items-center justify-between mb-6">
@@ -368,7 +387,7 @@ const FindTutor = () => {
                         </div>
                     )}
 
-                    {/* Teachers Section - Only show when "Tất cả" or "Gia sư" is selected */}
+                    {/* Phần gia sư - Chỉ hiển thị khi "Tất cả" hoặc "Gia sư" được chọn */}
                     {shouldShowSection('Gia sư') && (
                         <div className="lg:col-span-2 xl:col-span-3">
                             <div className="flex items-center justify-between mb-6">
@@ -380,26 +399,35 @@ const FindTutor = () => {
                             {getFilteredTutors().length > 0 ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {getFilteredTutors().map((tutor) => (
-                                        <div key={`teacher-${tutor.id}`} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition-all duration-300">
-                                            <div className={`w-20 h-20 ${tutor.bgColor} rounded-full flex items-center justify-center text-white font-semibold text-2xl mx-auto mb-4`}>
-                                                {tutor.avatar}
+                                        <Link key={`teacher-${tutor.id}`} to={`/tutor/${tutor.id}`} className="block">
+                                            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center hover:shadow-md transition-all duration-300 cursor-pointer">
+                                                <div className={`w-20 h-20 ${tutor.bgColor} rounded-full flex items-center justify-center text-white font-semibold text-2xl mx-auto mb-4`}>
+                                                    {tutor.avatar}
+                                                </div>
+                                                <h3 className="text-lg font-semibold text-gray-900 mb-1">{tutor.name}</h3>
+                                                <div className="flex items-center justify-center space-x-1 mb-2">
+                                                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                                                    <span className="text-sm font-medium text-gray-900">{tutor.rating}</span>
+                                                    <span className="text-sm text-gray-500">({tutor.reviews})</span>
+                                                </div>
+                                                <p className="text-gray-600 text-sm mb-4">{tutor.experience}</p>
+                                                <div className="flex space-x-2">
+                                                    <div className="flex-1 px-3 py-2 border border-[#FDCB6E] text-[#FDCB6E] rounded-lg hover:bg-[#FDCB6E] hover:text-white transition-all duration-200 text-sm font-medium">
+                                                        Đặt lịch
+                                                    </div>
+                                                    <button 
+                                                        className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 text-sm font-medium"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            // Handle message logic here
+                                                        }}
+                                                    >
+                                                        Nhắn tin
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <h3 className="text-lg font-semibold text-gray-900 mb-1">{tutor.name}</h3>
-                                            <div className="flex items-center justify-center space-x-1 mb-2">
-                                                <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                                                <span className="text-sm font-medium text-gray-900">{tutor.rating}</span>
-                                                <span className="text-sm text-gray-500">({tutor.reviews})</span>
-                                            </div>
-                                            <p className="text-gray-600 text-sm mb-4">{tutor.experience}</p>
-                                            <div className="flex space-x-2">
-                                                <button className="flex-1 px-3 py-2 border border-[#FDCB6E] text-[#FDCB6E] rounded-lg hover:bg-[#FDCB6E] hover:text-white transition-all duration-200 text-sm font-medium">
-                                                    Đặt lịch
-                                                </button>
-                                                <button className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 text-sm font-medium">
-                                                    Nhắn tin
-                                                </button>
-                                            </div>
-                                        </div>
+                                        </Link>
                                     ))}
                                 </div>
                             ) : filters.subject ? (
