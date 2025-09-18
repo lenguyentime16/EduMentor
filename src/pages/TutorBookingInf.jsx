@@ -1,13 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { 
-    Bell, 
-    User, 
-    ChevronDown, 
-    Settings, 
-    HelpCircle, 
-    LogOut, 
-    Star, 
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+    Star,
     ArrowLeft,
     Check,
     MapPin,
@@ -16,12 +10,10 @@ import {
     Award,
     Calendar
 } from 'lucide-react';
+import Header from '../components/layout/Header';
 
 const TutorBookingInf = () => {
-    const { tutorId } = useParams();
-    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
     const [selectedPackage, setSelectedPackage] = useState(null);
-    const dropdownRef = useRef(null);
 
     // Dữ liệu gia sư mẫu - trong ứng dụng thực tế sẽ được lấy dựa trên tutorId
     const tutor = {
@@ -29,7 +21,7 @@ const TutorBookingInf = () => {
         name: "Oryna L.",
         avatar: "/tutor-profile-pic.png",
         rating: 4.8,
-        reviews: 127,
+        reviewCount: 127,
         experience: "5 năm kinh nghiệm",
         languages: "Tiếng Anh, Tiếng Nga",
         location: "21 tuổi",
@@ -82,123 +74,10 @@ const TutorBookingInf = () => {
         ]
     };
 
-    // Xử lý click bên ngoài dropdown
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsUserDropdownOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    // Component Dropdown Người dùng
-    const UserDropdown = () => (
-        <div ref={dropdownRef} className="relative">
-            <button
-                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                className="flex items-center space-x-2 hover:bg-gray-50 rounded-lg p-2 transition-all duration-200"
-            >
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
-                    N
-                </div>
-                <div className="hidden md:block text-left">
-                    <div className="text-sm font-medium text-gray-900">Welcome, Nguyên</div>
-                    <div className="text-xs text-gray-500">lenguyentime16@gmail.com</div>
-                </div>
-                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {isUserDropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                    <div className="px-4 py-3 border-b border-gray-100">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-lg">
-                                N
-                            </div>
-                            <div>
-                                <p className="font-medium text-gray-900">Welcome, Nguyên</p>
-                                <p className="text-sm text-gray-500">lenguyentime16@gmail.com</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="py-2">
-                        <button className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
-                            <User className="w-5 h-5 text-gray-500" />
-                            <span className="text-gray-700 font-medium">Thông tin cá nhân</span>
-                        </button>
-                        <button className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
-                            <Settings className="w-5 h-5 text-gray-500" />
-                            <span className="text-gray-700 font-medium">Cài đặt tài khoản</span>
-                        </button>
-                    </div>
-
-                    <div className="border-t border-gray-100 my-2"></div>
-
-                    <div className="py-2">
-                        <button className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150">
-                            <span className="text-gray-700 font-medium">Câu hỏi thường gặp</span>
-                        </button>
-                        <button className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150">
-                            <span className="text-gray-700 font-medium">Điều khoản và điều kiện</span>
-                        </button>
-                        <button className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150">
-                            <span className="text-gray-700 font-medium">Chính sách bảo mật</span>
-                        </button>
-                        <button className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
-                            <HelpCircle className="w-5 h-5 text-gray-500" />
-                            <span className="text-gray-700 font-medium">Trợ giúp và hỗ trợ</span>
-                        </button>
-                    </div>
-
-                    <div className="border-t border-gray-100 my-2"></div>
-
-                    <div className="px-4 py-2">
-                        <button className="w-full bg-[#FDF3E1] text-[#FDCB6E] rounded-lg py-3 px-4 font-medium hover:bg-[#FCF0D0] transition-all duration-200 flex items-center justify-center space-x-2">
-                            <LogOut className="w-4 h-4" />
-                            <span>Đăng xuất</span>
-                        </button>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
-            <header className="bg-white shadow-sm border-b">
-                <div className="max-w-7xl mx-auto px-6 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="text-2xl font-bold text-[#FDCB6E]">Edumentors</div>
-                    
-                        <nav className="flex items-center space-x-8">
-                            <Link to="/dashboard" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">
-                                Dashboard
-                            </Link>
-                            <Link to="/find-tutor" className="text-[#FDCB6E] font-medium transition-colors">
-                                Find a tutor
-                            </Link>
-                            <Link to="/my-bookings" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">
-                                My Bookings
-                            </Link>
-                            <Link to="/messages" className="text-gray-600 hover:text-[#FDCB6E] transition-colors">
-                                Messages
-                            </Link>
-                        </nav>
-
-                        <div className="flex items-center space-x-4">
-                            <Bell className="w-6 h-6 text-gray-600 cursor-pointer hover:text-[#FDCB6E] transition-colors duration-200" />
-                            <UserDropdown />
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <Header currentPage="Find a tutor" />
 
             {/* Nội dung chính */}
             <div className="max-w-7xl mx-auto px-6 py-8">
@@ -215,8 +94,8 @@ const TutorBookingInf = () => {
                         <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-6">
                             <div className="flex items-start space-x-6">
                                 <div className="relative">
-                                    <img 
-                                        src={tutor.avatar} 
+                                    <img
+                                        src={tutor.avatar}
                                         alt={tutor.name}
                                         className="w-24 h-24 rounded-full object-cover"
                                         onError={(e) => {
@@ -292,7 +171,7 @@ const TutorBookingInf = () => {
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-xl font-bold text-gray-900">Đánh giá 4.8</h2>
                                 <div className="flex items-center space-x-1">
-                                    {[1,2,3,4,5].map((star) => (
+                                    {[1, 2, 3, 4, 5].map((star) => (
                                         <Star key={star} className="w-5 h-5 text-yellow-400 fill-current" />
                                     ))}
                                 </div>
@@ -308,7 +187,7 @@ const TutorBookingInf = () => {
                                             <div>
                                                 <div className="font-medium text-gray-900">{review.name}</div>
                                                 <div className="flex items-center space-x-1">
-                                                    {[1,2,3,4,5].map((star) => (
+                                                    {[1, 2, 3, 4, 5].map((star) => (
                                                         <Star key={star} className="w-3 h-3 text-yellow-400 fill-current" />
                                                     ))}
                                                 </div>
@@ -343,16 +222,15 @@ const TutorBookingInf = () => {
                     <div className="lg:col-span-1">
                         <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-6">
                             <h3 className="text-lg font-bold text-gray-900 mb-4">Đặt lịch với Oryna L.</h3>
-                            
+
                             <div className="space-y-4 mb-6">
                                 {tutor.packages.map((pkg) => (
-                                    <div 
+                                    <div
                                         key={pkg.id}
-                                        className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                                            selectedPackage?.id === pkg.id 
-                                                ? 'border-[#FDCB6E] bg-[#FDF9F0]' 
+                                        className={`border rounded-lg p-4 cursor-pointer transition-all ${selectedPackage?.id === pkg.id
+                                                ? 'border-[#FDCB6E] bg-[#FDF9F0]'
                                                 : 'border-gray-200 hover:border-gray-300'
-                                        }`}
+                                            }`}
                                         onClick={() => setSelectedPackage(pkg)}
                                     >
                                         <div className="flex justify-between items-start mb-2">
@@ -371,8 +249,8 @@ const TutorBookingInf = () => {
                                 <button className="w-full bg-[#FDCB6E] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#E6B862] transition-colors">
                                     Đặt buổi học thử miễn phí
                                 </button>
-                                <Link 
-                                    to="/booking" 
+                                <Link
+                                    to="/booking"
                                     state={{ tutor: { name: tutor.name, subject: "Mathematics" } }}
                                     className="block"
                                 >
