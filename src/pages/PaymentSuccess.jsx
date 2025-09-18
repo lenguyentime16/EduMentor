@@ -203,7 +203,7 @@ const PaymentSuccess = () => {
             </button>
             
             <Link 
-              to="/my-booking"
+              to="/my-bookings"
               className="flex items-center justify-center px-6 py-3 bg-[#FDCB6E] text-white rounded-lg hover:bg-[#E6B862] transition-colors"
             >
               <Calendar className="h-5 w-5 mr-2" />

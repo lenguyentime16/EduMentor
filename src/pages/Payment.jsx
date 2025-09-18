@@ -1,8 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown, User, Settings, HelpCircle, LogOut, Bell, ArrowLeft, Calendar, Clock } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Payment = () => {
+  const location = useLocation();
+  const bookingData = location.state?.booking || {
+    tutor: "Sarah Miller",
+    date: "Dec 15",
+    time: "9:00 AM",
+    duration: "1h",
+    subject: "Mathematics",
+    hourlyRate: 45,
+    total: 45,
+    notes: ""
+  };
+
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -179,16 +191,16 @@ const Payment = () => {
             {/* Tutor Info */}
             <div className="flex items-center space-x-4 mb-8">
               <div className="w-16 h-16 bg-[#FDCB6E] rounded-full flex items-center justify-center text-white font-bold text-xl">
-                SM
+                {bookingData.tutor.split(' ').map(name => name[0]).join('')}
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">Sarah Miller</h3>
+                <h3 className="text-xl font-semibold text-gray-900">{bookingData.tutor}</h3>
                 <div className="flex items-center space-x-1 text-sm text-gray-600 mb-1">
                   <span className="text-yellow-400">★</span>
                   <span>4.9 (127 reviews)</span>
                 </div>
                 <div className="inline-block bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
-                  Mathematics - Calculus
+                  {bookingData.subject}
                 </div>
               </div>
             </div>
@@ -201,7 +213,7 @@ const Payment = () => {
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900">Date</p>
-                  <p className="text-gray-600">December 15, 2024</p>
+                  <p className="text-gray-600">{bookingData.date}</p>
                 </div>
               </div>
 
@@ -211,7 +223,7 @@ const Payment = () => {
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900">Time</p>
-                  <p className="text-gray-600">2:00 PM - 3:00 PM</p>
+                  <p className="text-gray-600">{bookingData.time} ({bookingData.duration})</p>
                 </div>
               </div>
             </div>
@@ -230,17 +242,17 @@ const Payment = () => {
             <div className="space-y-4 mb-8">
               <div className="flex justify-between items-center">
                 <span className="text-gray-600 font-medium">Session:</span>
-                <span className="font-semibold text-gray-900">Mathematics - Calculus</span>
+                <span className="font-semibold text-gray-900">{bookingData.subject}</span>
               </div>
               
               <div className="flex justify-between items-center">
                 <span className="text-gray-600 font-medium">Duration:</span>
-                <span className="font-semibold text-gray-900">1 hour</span>
+                <span className="font-semibold text-gray-900">{bookingData.duration.replace('h', ' hour')}</span>
               </div>
               
               <div className="flex justify-between items-center">
                 <span className="text-gray-600 font-medium">Rate:</span>
-                <span className="font-semibold text-gray-900">$45/hour</span>
+                <span className="font-semibold text-gray-900">${bookingData.hourlyRate}/hour</span>
               </div>
             </div>
 
@@ -264,13 +276,13 @@ const Payment = () => {
             <div className="space-y-4 mb-8">
               <div className="flex justify-between items-center">
                 <span className="text-gray-600 font-medium">Subtotal:</span>
-                <span className="font-semibold text-gray-900">$45</span>
+                <span className="font-semibold text-gray-900">${bookingData.total}</span>
               </div>
               
               <div className="border-t pt-4">
                 <div className="flex justify-between items-center">
                   <span className="text-xl font-semibold text-gray-900">Total:</span>
-                  <span className="text-xl font-semibold text-[#FDCB6E]">$45</span>
+                  <span className="text-xl font-semibold text-[#FDCB6E]">${bookingData.total}</span>
                 </div>
               </div>
             </div>

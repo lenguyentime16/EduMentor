@@ -17,6 +17,7 @@ import Dashboard from './pages/Dashboard';
 import FindTutor from './pages/FindTutor';
 import MyBookings from './pages/MyBookings';
 import TutorBookingInf from './pages/TutorBookingInf';
+import Booking from './pages/Booking';
 import Payment from './pages/Payment';
 import PaymentMethod from './pages/PaymentMethod';
 import Confirmation from './pages/Confirmation';
@@ -69,6 +70,9 @@ function App() {
 
         {/* Tutor Booking Info Route */}
         <Route path="/tutor/:tutorId" element={<TutorBookingInf />} />
+
+        {/* Booking Route */}
+        <Route path="/booking" element={<Booking />} />
 
         {/* Payment Route */}
         <Route path="/payment" element={<Payment />} />

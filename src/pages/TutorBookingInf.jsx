@@ -371,9 +371,15 @@ const TutorBookingInf = () => {
                                 <button className="w-full bg-[#FDCB6E] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#E6B862] transition-colors">
                                     Đặt buổi học thử miễn phí
                                 </button>
-                                <button className="w-full bg-[#FDCB6E] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#E6B862] transition-colors">
-                                    Đặt buổi học trả phí
-                                </button>
+                                <Link 
+                                    to="/booking" 
+                                    state={{ tutor: { name: tutor.name, subject: "Mathematics" } }}
+                                    className="block"
+                                >
+                                    <button className="w-full bg-[#FDCB6E] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#E6B862] transition-colors">
+                                        Đặt buổi học trả phí
+                                    </button>
+                                </Link>
                             </div>
 
                             <div className="text-center text-sm text-gray-600 mb-4">
