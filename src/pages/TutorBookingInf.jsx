@@ -42,10 +42,10 @@ const TutorBookingInf = () => {
             { subject: "Chiến lược học tập", level: "Nâng cao" }
         ],
         packages: [
-            { id: 1, duration: "1h", sessions: 1, price: 45, discounts: "Giảm giá mới trị giá 8" },
-            { id: 2, duration: "1h", sessions: 2, price: 89, discounts: "Giảm giá được áp dụng tự động" },
-            { id: 3, duration: "30 phút", sessions: 1, price: 25, discounts: "Ưu đãi thử nghiệm tốt nhất với 1" },
-            { id: 4, duration: "1.5h", sessions: 1, price: 67, discounts: "Gặp gia sư của bạn. 1.5h dịch vụ của chúng tôi" }
+            { id: 1, duration: "1h", sessions: 1, price: 1080000, discounts: "Giảm giá mới trị giá 200.000 VNĐ" },
+            { id: 2, duration: "1h", sessions: 2, price: 2100000, discounts: "Giảm giá được áp dụng tự động" },
+            { id: 3, duration: "30 phút", sessions: 1, price: 600000, discounts: "Ưu đãi thử nghiệm tốt nhất" },
+            { id: 4, duration: "1.5h", sessions: 1, price: 1600000, discounts: "Gặp gia sư của bạn. 1.5h dịch vụ của chúng tôi" }
         ],
         reviews: [
             {
@@ -228,14 +228,14 @@ const TutorBookingInf = () => {
                                     <div
                                         key={pkg.id}
                                         className={`border rounded-lg p-4 cursor-pointer transition-all ${selectedPackage?.id === pkg.id
-                                                ? 'border-[#FDCB6E] bg-[#FDF9F0]'
-                                                : 'border-gray-200 hover:border-gray-300'
+                                            ? 'border-[#FDCB6E] bg-[#FDF9F0]'
+                                            : 'border-gray-200 hover:border-gray-300'
                                             }`}
                                         onClick={() => setSelectedPackage(pkg)}
                                     >
                                         <div className="flex justify-between items-start mb-2">
                                             <div>
-                                                <div className="font-semibold text-gray-900">£{pkg.price}</div>
+                                                <div className="font-semibold text-gray-900">{pkg.price.toLocaleString('vi-VN')} VNĐ</div>
                                                 <div className="text-sm text-gray-600">{pkg.duration} • {pkg.sessions} Buổi học</div>
                                             </div>
                                             <div className="text-xs text-[#FDCB6E] font-medium">140+</div>
