@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ArrowLeft, CreditCard, Shield, Lock, Bell, ChevronDown, User, Settings, HelpCircle, LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const PaymentMethod = () => {
+  const navigate = useNavigate();
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("credit-card");
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -76,7 +77,13 @@ const PaymentMethod = () => {
               <User className="w-5 h-5 text-gray-500" />
               <span className="text-gray-700 font-medium">Personal Info</span>
             </button>
-            <button className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
+            <button 
+              onClick={() => {
+                setIsUserDropdownOpen(false);
+                navigate('/account-settings');
+              }}
+              className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150"
+            >
               <Settings className="w-5 h-5 text-gray-500" />
               <span className="text-gray-700 font-medium">Account settings</span>
             </button>

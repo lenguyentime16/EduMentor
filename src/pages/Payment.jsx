@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown, User, Settings, HelpCircle, LogOut, Bell, ArrowLeft, Calendar, Clock } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Payment = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const bookingData = location.state?.booking || {
     tutor: "Sarah Miller",
@@ -71,7 +72,13 @@ const Payment = () => {
               <User className="w-5 h-5 text-gray-500" />
               <span className="text-gray-700 font-medium">Personal Info</span>
             </button>
-            <button className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150">
+            <button 
+              onClick={() => {
+                setIsUserDropdownOpen(false);
+                navigate('/account-settings');
+              }}
+              className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 transition-colors duration-150"
+            >
               <Settings className="w-5 h-5 text-gray-500" />
               <span className="text-gray-700 font-medium">Account settings</span>
             </button>
