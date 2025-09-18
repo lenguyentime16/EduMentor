@@ -26,6 +26,7 @@ const FindTutor = () => {
             name: 'Nguyễn Thị Hương',
             subject: 'Toán nâng cao lớp 12',
             subjectCategory: 'Toán',
+            level: 'Thạc sĩ/ Tiến sĩ',
             rating: 4.9,
             reviews: 19,
             price: '380,000',
@@ -40,6 +41,7 @@ const FindTutor = () => {
             name: 'Trần Văn Minh',
             subject: 'Lập trình Python cơ bản',
             subjectCategory: 'Tin học - Lập trình',
+            level: 'Cử nhân',
             rating: 4.8,
             reviews: 24,
             price: '250,000',
@@ -54,6 +56,7 @@ const FindTutor = () => {
             name: 'Lê Thị Mai',
             subject: 'IELTS Speaking Band 7+',
             subjectCategory: 'Tiếng Anh',
+            level: 'Sinh viên',
             rating: 4.7,
             reviews: 31,
             price: '180,000',
@@ -78,22 +81,44 @@ const FindTutor = () => {
         'Tin học - Lập trình'
     ];
 
+    // Tùy chọn trình độ cho dropdown
+    const levelOptions = [
+        'Sinh viên',
+        'Cử nhân',
+        'Thạc sĩ/ Tiến sĩ'
+    ];
+
     // Hàm kiểm tra section nào nên hiển thị dựa trên tab đang active
     const shouldShowSection = (sectionType) => {
         if (activeTab === 'Tất cả') return true;
         return activeTab === sectionType;
     };
 
-    // Hàm lọc gia sư dựa trên môn học đã chọn
+    // Hàm lọc gia sư dựa trên môn học và trình độ đã chọn
     const getFilteredTutors = () => {
-        console.log('Môn học filter hiện tại:', filters.subject); // Debug log
-        console.log('Tất cả gia sư:', tutors); // Debug log
-        if (!filters.subject) return tutors;
-        const filtered = tutors.filter(tutor => {
-            console.log(`So sánh: ${tutor.subjectCategory} === ${filters.subject}`); // Debug log
-            return tutor.subjectCategory === filters.subject;
-        });
-        console.log('Gia sư đã lọc:', filtered); // Debug log
+        console.log('Môn học filter hiện tại:', filters.subject);
+        console.log('Trình độ filter hiện tại:', filters.level);
+        console.log('Tất cả gia sư:', tutors);
+
+        let filtered = tutors;
+
+        // Lọc theo môn học
+        if (filters.subject) {
+            filtered = filtered.filter(tutor => {
+                console.log(`So sánh môn học: ${tutor.subjectCategory} === ${filters.subject}`);
+                return tutor.subjectCategory === filters.subject;
+            });
+        }
+
+        // Lọc theo trình độ
+        if (filters.level) {
+            filtered = filtered.filter(tutor => {
+                console.log(`So sánh trình độ: ${tutor.level} === ${filters.level}`);
+                return tutor.level === filters.level;
+            });
+        }
+
+        console.log('Gia sư đã lọc:', filtered);
         return filtered;
     };
 
@@ -135,6 +160,23 @@ const FindTutor = () => {
         }));
     };
 
+    // Xử lý việc chọn trình độ
+    const handleLevelSelect = (level) => {
+        console.log('Trình độ đã chọn:', level); // Debug log
+        setFilters(prev => {
+            const newFilters = {
+                ...prev,
+                level: level
+            };
+            console.log('Filters mới:', newFilters); // Debug log
+            return newFilters;
+        });
+        setDropdownStates(prev => ({
+            ...prev,
+            level: false
+        }));
+    };
+
     const TutorCard = ({ tutor }) => (
         <Link to={`/tutor/${tutor.id}`} className="block">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300 hover:scale-[1.02] cursor-pointer">
@@ -151,7 +193,7 @@ const FindTutor = () => {
                                 <h3 className="text-lg font-semibold text-gray-900 mb-1">{tutor.name}</h3>
                                 <p className="text-gray-600 font-medium">{tutor.subject}</p>
                             </div>
-                            <button 
+                            <button
                                 className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -192,7 +234,7 @@ const FindTutor = () => {
                                 {tutor.price} VNĐ/giờ
                             </div>
                             <div className="flex space-x-2">
-                                <button 
+                                <button
                                     className="px-4 py-2 border border-[#FDCB6E] text-[#FDCB6E] rounded-lg hover:bg-[#FDCB6E] hover:text-white transition-all duration-200 font-medium"
                                     onClick={(e) => {
                                         e.preventDefault();
@@ -305,16 +347,50 @@ const FindTutor = () => {
                             )}
                         </div>
 
-                        <button
-                            onClick={() => toggleDropdown('level')}
-                            className={`flex items-center space-x-2 px-4 py-3 rounded-lg border transition-all duration-200 ${filters.level
-                                ? 'bg-[#FFF3E0] border-[#FDCB6E] text-[#FDCB6E]'
-                                : 'bg-white border-gray-300 text-gray-600 hover:border-[#FDCB6E] hover:text-[#FDCB6E]'
-                                }`}
-                        >
-                            <Filter className="w-4 h-4" />
-                            <span className="font-medium">Trình độ</span>
-                        </button>
+                        {/* Dropdown trình độ */}
+                        <div className="relative">
+                            <button
+                                onClick={() => toggleDropdown('level')}
+                                className={`flex items-center space-x-2 px-4 py-3 rounded-lg border transition-all duration-200 ${filters.level
+                                    ? 'bg-[#FFF3E0] border-[#FDCB6E] text-[#FDCB6E]'
+                                    : 'bg-white border-gray-300 text-gray-600 hover:border-[#FDCB6E] hover:text-[#FDCB6E]'
+                                    }`}
+                            >
+                                <Filter className="w-4 h-4" />
+                                <span className="font-medium">
+                                    {filters.level || 'Trình độ'}
+                                </span>
+                                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${dropdownStates.level ? 'rotate-180' : ''
+                                    }`} />
+                            </button>
+
+                            {dropdownStates.level && (
+                                <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 animate-in slide-in-from-top-2 duration-200">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleLevelSelect('');
+                                        }}
+                                        className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150"
+                                    >
+                                        <span className="text-gray-700 font-medium">Tất cả trình độ</span>
+                                    </button>
+                                    {levelOptions.map((level) => (
+                                        <button
+                                            key={level}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleLevelSelect(level);
+                                            }}
+                                            className={`w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors duration-150 ${filters.level === level ? 'bg-[#FFF3E0] text-[#FDCB6E]' : ''
+                                                }`}
+                                        >
+                                            <span className="text-gray-700 font-medium">{level}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                         <button
                             onClick={() => toggleDropdown('price')}
                             className={`flex items-center space-x-2 px-4 py-3 rounded-lg border transition-all duration-200 ${filters.price
@@ -415,7 +491,7 @@ const FindTutor = () => {
                                                     <div className="flex-1 px-3 py-2 border border-[#FDCB6E] text-[#FDCB6E] rounded-lg hover:bg-[#FDCB6E] hover:text-white transition-all duration-200 text-sm font-medium">
                                                         Đặt lịch
                                                     </div>
-                                                    <button 
+                                                    <button
                                                         className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 text-sm font-medium"
                                                         onClick={(e) => {
                                                             e.preventDefault();
