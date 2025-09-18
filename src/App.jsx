@@ -18,6 +18,7 @@ import FindTutor from './pages/FindTutor';
 import MyBookings from './pages/MyBookings';
 import TutorBookingInf from './pages/TutorBookingInf';
 import Booking from './pages/Booking';
+import Messages from './pages/Messages';
 import Payment from './pages/Payment';
 import PaymentMethod from './pages/PaymentMethod';
 import Confirmation from './pages/Confirmation';
@@ -73,6 +74,9 @@ function App() {
 
         {/* Booking Route */}
         <Route path="/booking" element={<Booking />} />
+
+        {/* Messages Route */}
+        <Route path="/messages" element={<Messages />} />
 
         {/* Payment Route */}
         <Route path="/payment" element={<Payment />} />

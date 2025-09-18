@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, Filter, Star, Clock, MapPin, ChevronDown, Heart, MessageCircle } from 'lucide-react';
 import Header from '../components/layout/Header';
 
 const FindTutor = () => {
+    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const [activeTab, setActiveTab] = useState('Tất cả');
     const [filters, setFilters] = useState({
@@ -239,7 +240,7 @@ const FindTutor = () => {
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
-                                        // Handle message logic here
+                                        navigate('/messages');
                                     }}
                                 >
                                     Nhắn tin
@@ -496,7 +497,7 @@ const FindTutor = () => {
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             e.stopPropagation();
-                                                            // Handle message logic here
+                                                            navigate('/messages');
                                                         }}
                                                     >
                                                         Nhắn tin
