@@ -80,16 +80,12 @@ const AccSetting = () => {
                                             SỐ ĐIỆN THOẠI:
                                         </label>
                                         <div className="flex">
-                                            <div className="flex items-center px-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg">
-                                                <div className="w-6 h-4 bg-red-500 mr-2"></div>
-                                                <span className="text-sm text-gray-600">+84</span>
-                                            </div>
                                             <input
                                                 type="tel"
                                                 name="phone"
                                                 value={formData.phone.replace('+84 ', '')}
                                                 onChange={handleInputChange}
-                                                className="flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-[#FDCB6E] focus:border-[#FDCB6E] outline-none transition-all duration-200"
+                                                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FDCB6E] focus:border-[#FDCB6E] outline-none transition-all duration-200"
                                                 placeholder="8434813802"
                                             />
                                         </div>
