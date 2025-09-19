@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
     Star,
     ArrowLeft,
@@ -8,12 +8,32 @@ import {
     Clock,
     BookOpen,
     Award,
-    Calendar
+    Calendar,
+    AlertCircle
 } from 'lucide-react';
 import Header from '../components/layout/Header';
 
 const TutorBookingInf = () => {
     const [selectedPackage, setSelectedPackage] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
+    const navigate = useNavigate();
+
+    // Hàm xử lý khi click nút đặt lịch học
+    const handleBookingClick = () => {
+        if (!selectedPackage) {
+            setShowAlert(true);
+            setTimeout(() => setShowAlert(false), 3000); // Ẩn thông báo sau 3 giây
+            return;
+        }
+
+        // Nếu đã chọn gói, chuyển hướng đến trang booking
+        navigate('/booking', {
+            state: {
+                tutor: { name: tutor.name, subject: "Mathematics" },
+                selectedPackage: selectedPackage
+            }
+        });
+    };
 
     // Dữ liệu gia sư mẫu - trong ứng dụng thực tế sẽ được lấy dựa trên tutorId
     const tutor = {
@@ -42,10 +62,10 @@ const TutorBookingInf = () => {
             { subject: "Chiến lược học tập", level: "Nâng cao" }
         ],
         packages: [
-            { id: 1, duration: "1h", sessions: 1, price: 1080000, discounts: "Giảm giá mới trị giá 200.000 VNĐ" },
-            { id: 2, duration: "1h", sessions: 2, price: 2100000, discounts: "Giảm giá được áp dụng tự động" },
-            { id: 3, duration: "30 phút", sessions: 1, price: 600000, discounts: "Ưu đãi thử nghiệm tốt nhất" },
-            { id: 4, duration: "1.5h", sessions: 1, price: 1600000, discounts: "Gặp gia sư của bạn. 1.5h dịch vụ của chúng tôi" }
+            { id: 1, duration: "2 buổi/tuần", sessions: 8, price: 400000, discounts: "Gói học thường xuyên, tiết kiệm chi phí" },
+            { id: 2, duration: "3 buổi/tuần", sessions: 12, price: 500000, discounts: "Gói học chuyên sâu, hiệu quả cao" },
+            { id: 3, duration: "1 buổi thử", sessions: 1, price: 100000, discounts: "Ưu đãi thử nghiệm cho học viên mới" },
+            { id: 4, duration: "1 buổi đơn lẻ", sessions: 1, price: 150000, discounts: "Linh hoạt cho nhu cầu học tập" }
         ],
         reviews: [
             {
@@ -78,6 +98,14 @@ const TutorBookingInf = () => {
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
             <Header currentPage="Find a tutor" />
+
+            {/* Alert thông báo */}
+            {showAlert && (
+                <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2">
+                    <AlertCircle className="w-5 h-5" />
+                    <span>Hãy chọn gói học phí!</span>
+                </div>
+            )}
 
             {/* Nội dung chính */}
             <div className="max-w-7xl mx-auto px-6 py-8">
@@ -235,8 +263,14 @@ const TutorBookingInf = () => {
                                     >
                                         <div className="flex justify-between items-start mb-2">
                                             <div>
-                                                <div className="font-semibold text-gray-900">{pkg.price.toLocaleString('vi-VN')} VNĐ</div>
-                                                <div className="text-sm text-gray-600">{pkg.duration} • {pkg.sessions} Buổi học</div>
+                                                <div className="font-semibold text-gray-900">
+                                                    {pkg.price.toLocaleString('vi-VN')} VNĐ
+                                                    {(pkg.id === 1 || pkg.id === 2) ? '/tháng' : ''}
+                                                </div>
+                                                <div className="text-sm text-gray-600">
+                                                    {pkg.duration}
+                                                    {(pkg.id === 1 || pkg.id === 2) ? ` • ${pkg.sessions} buổi/tháng` : ''}
+                                                </div>
                                             </div>
                                             <div className="text-xs text-[#FDCB6E] font-medium">140+</div>
                                         </div>
@@ -246,18 +280,16 @@ const TutorBookingInf = () => {
                             </div>
 
                             <div className="space-y-3 mb-6">
-                                <button className="w-full bg-[#FDCB6E] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#E6B862] transition-colors">
-                                    Đặt buổi học thử miễn phí
-                                </button>
-                                <Link
-                                    to="/booking"
-                                    state={{ tutor: { name: tutor.name, subject: "Mathematics" } }}
-                                    className="block"
+                                <button
+                                    onClick={handleBookingClick}
+                                    className={`w-full py-3 px-4 rounded-lg font-medium transition-all duration-200 ${selectedPackage
+                                        ? 'bg-[#FDCB6E] hover:bg-[#E6B862] text-white'
+                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-60'
+                                        }`}
+                                    disabled={!selectedPackage}
                                 >
-                                    <button className="w-full bg-[#FDCB6E] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#E6B862] transition-colors">
-                                        Đặt buổi học trả phí
-                                    </button>
-                                </Link>
+                                    Đặt lịch học
+                                </button>
                             </div>
 
                             <div className="text-center text-sm text-gray-600 mb-4">
