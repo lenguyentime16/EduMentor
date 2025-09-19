@@ -49,7 +49,7 @@ const AccSetting = () => {
                 <div className="max-w-2xl">
                     <h2 className="text-xl font-semibold text-gray-900 mb-6">Thông tin cá nhân</h2>
                     <p className="text-gray-600 mb-8">Quản lý thông tin cá nhân và hồ sơ của bạn</p>
-
+                    
                     <div className="space-y-6">
                         {/* Profile Picture */}
                         <div className="flex items-center space-x-6">
@@ -291,21 +291,23 @@ const AccSetting = () => {
                                 <div>
                                     <h3 className="text-sm font-medium text-gray-900 mb-4">Cài đặt</h3>
                                     <div className="space-y-3">
-                                        <button
+                                        <button 
                                             onClick={() => setActiveTab('personal')}
-                                            className={`w-full text-left py-3 px-4 rounded-lg font-medium transition-all duration-200 ${activeTab === 'personal'
-                                                    ? 'bg-[#FDF3E1] text-[#FDCB6E] hover:bg-[#FCF0D0]'
+                                            className={`w-full text-left py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
+                                                activeTab === 'personal' 
+                                                    ? 'bg-[#FDF3E1] text-[#FDCB6E] hover:bg-[#FCF0D0]' 
                                                     : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-                                                }`}
+                                            }`}
                                         >
                                             Thông tin cá nhân
                                         </button>
-                                        <button
+                                        <button 
                                             onClick={() => setActiveTab('account')}
-                                            className={`w-full text-left py-3 px-4 rounded-lg font-medium transition-all duration-200 ${activeTab === 'account'
-                                                    ? 'bg-[#FDF3E1] text-[#FDCB6E] hover:bg-[#FCF0D0]'
+                                            className={`w-full text-left py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
+                                                activeTab === 'account' 
+                                                    ? 'bg-[#FDF3E1] text-[#FDCB6E] hover:bg-[#FCF0D0]' 
                                                     : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-                                                }`}
+                                            }`}
                                         >
                                             Cài đặt tài khoản
                                         </button>
@@ -317,6 +319,127 @@ const AccSetting = () => {
                         {/* Right Content */}
                         <div className="flex-1 p-8">
                             {renderContent()}
+                        </div>
+
+
+                                    {/* Email Address */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            ĐỊA CHỈ EMAIL:
+                                        </label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FDCB6E] focus:border-[#FDCB6E] outline-none transition-all duration-200"
+                                            placeholder="lenguyentime16@gmail.com"
+                                        />
+                                    </div>
+
+                                    {/* Current Password */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            MẬT KHẨU CŨ:
+                                        </label>
+                                        <div className="relative">
+                                            <input
+                                                type={showPasswords.current ? "text" : "password"}
+                                                name="currentPassword"
+                                                value={formData.currentPassword}
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FDCB6E] focus:border-[#FDCB6E] outline-none transition-all duration-200"
+                                                placeholder="Mật khẩu cũ"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => togglePasswordVisibility('current')}
+                                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                                            >
+                                                {showPasswords.current ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* New Password */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            MẬT KHẨU MỚI:
+                                        </label>
+                                        <div className="relative">
+                                            <input
+                                                type={showPasswords.new ? "text" : "password"}
+                                                name="newPassword"
+                                                value={formData.newPassword}
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FDCB6E] focus:border-[#FDCB6E] outline-none transition-all duration-200"
+                                                placeholder="Mật khẩu mới"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => togglePasswordVisibility('new')}
+                                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                                            >
+                                                {showPasswords.new ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                            </button>
+                                        </div>
+                                        <p className="text-xs text-gray-500 mt-2">Độ mạnh mật khẩu: Yếu</p>
+                                    </div>
+
+                                    {/* Confirm Password */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            NHẬP LẠI MẬT KHẨU MỚI:
+                                        </label>
+                                        <div className="relative">
+                                            <input
+                                                type={showPasswords.confirm ? "text" : "password"}
+                                                name="confirmPassword"
+                                                value={formData.confirmPassword}
+                                                onChange={handleInputChange}
+                                                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FDCB6E] focus:border-[#FDCB6E] outline-none transition-all duration-200"
+                                                placeholder="Nhập lại mật khẩu mới"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => togglePasswordVisibility('confirm')}
+                                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                                            >
+                                                {showPasswords.confirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Newsletter Subscription */}
+                                    <div className="border-t border-gray-200 pt-6">
+                                        <label className="block text-sm font-medium text-gray-700 mb-4">
+                                            NEWSLETTERS:
+                                        </label>
+                                        <div className="flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                id="newsletter"
+                                                checked={isNewsletterSubscribed}
+                                                onChange={(e) => setIsNewsletterSubscribed(e.target.checked)}
+                                                className="w-4 h-4 text-[#FDCB6E] bg-gray-100 border-gray-300 rounded focus:ring-[#FDCB6E] focus:ring-2 transition-all duration-200"
+                                            />
+                                            <label htmlFor="newsletter" className="ml-3 text-sm text-gray-700">
+                                                Đăng ký nhận bản tin
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    {/* Save Button */}
+                                    <div className="pt-6">
+                                        <button
+                                            onClick={handleSubmit}
+                                            className="w-full bg-[#FDCB6E] text-white py-3 px-6 rounded-lg font-medium hover:bg-[#E6B15C] focus:ring-4 focus:ring-[#FDCB6E]/20 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                                        >
+                                            Lưu thay đổi
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
