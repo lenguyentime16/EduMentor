@@ -7,11 +7,30 @@ const Header = ({ currentPage = 'Dashboard' }) => {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  // Handle logout
+  const handleLogout = () => {
+    console.log("User logging out...");
+
+    // Đóng dropdown ngay lập tức
+    setIsUserDropdownOpen(false);
+
+    // Clear any user data here if needed
+    // localStorage.removeItem('authToken');
+    // sessionStorage.clear();
+
+    // Navigate to login page
+    navigate('/login', { replace: true });
+  };
+
   // Handle click outside dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsUserDropdownOpen(false);
+        // Kiểm tra xem có phải click vào logout button không
+        const isLogoutButton = event.target.closest('[data-logout-button]');
+        if (!isLogoutButton) {
+          setIsUserDropdownOpen(false);
+        }
       }
     };
 
@@ -64,7 +83,7 @@ const Header = ({ currentPage = 'Dashboard' }) => {
               <User className="w-5 h-5 text-gray-500" />
               <span className="text-gray-700 font-medium">Personal Info</span>
             </button>
-            <button 
+            <button
               onClick={() => {
                 setIsUserDropdownOpen(false);
                 navigate('/account-settings');
@@ -101,9 +120,14 @@ const Header = ({ currentPage = 'Dashboard' }) => {
 
           {/* Logout */}
           <div className="px-4 py-2">
-            <button className="w-full bg-[#FDCB6E] text-white rounded-lg py-3 px-4 font-medium hover:bg-[#E6B15C] transition-all duration-200 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md">
+            <button
+              onClick={handleLogout}
+              type="button"
+              data-logout-button="true"
+              className="w-full bg-[#FDCB6E] text-white rounded-lg py-3 px-4 font-medium hover:bg-[#E6B15C] transition-all duration-200 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md cursor-pointer"
+            >
               <LogOut className="w-4 h-4" />
-              <span>Log Out</span>
+              <span>Đăng xuất</span>
             </button>
           </div>
         </div>
